@@ -1,0 +1,8 @@
+.locations-loop {
+	display: flex;
+	flex-wrap: wrap;
+	article {
+		flex: 1 1 30%;
+		background: center/cover;
+	}
+}

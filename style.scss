@@ -8,12 +8,7 @@ Template:    traveler
 
 (optional values you can add: Theme URI, Author URI, Version)
 */
-@import url(../traveler/style.css);
-.locations-loop {
-  display: flex;
-  flex-wrap: wrap; }
-  .locations-loop article {
-    flex: 1 1 30%;
-    background: center/cover; }
 
-/*# sourceMappingURL=style.css.map */
+@import "../traveler/style.css";
+
+@import "scss/locations-loop";

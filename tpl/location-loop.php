@@ -4,11 +4,31 @@
  * Shows a loop of locations
  */
 
-$args = [
-	'post_type' => '',
-	'' => '',
-	'' => '',
-	'' => '',
-];
+$args = wp_parse_args( $atts, [
+	'post_type'   => 'location',
+	'post_parent' => 0,
+] );
 
-$query = new WP_Query();
+if ( is_singular( 'location' ) ) {
+	$args['post_parent'] = get_the_ID();
+}
+
+$the_query = new WP_Query( $args ); ?>
+
+<?php if ( $the_query->have_posts() ) : ?>
+	<div class="locations-loop">
+		<?php while ( $the_query->have_posts() ) {
+			$the_query->the_post(); ?>
+			<article>
+				<a href="<?php the_permalink() ?>">
+					<?php the_post_thumbnail( 'medium_large' ) ?>
+					<h2><?php the_title(); ?></h2>
+				</a>
+			</article>
+			<?php
+		} ?>
+	</div>
+<?php endif;
+
+wp_reset_postdata();
+?>
