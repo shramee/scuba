@@ -19,7 +19,8 @@ $the_query = new WP_Query( $args ); ?>
 	<div class="locations-loop">
 		<?php while ( $the_query->have_posts() ) {
 			$the_query->the_post(); ?>
-			<article style="background-image: url(<?php the_post_thumbnail_url( 'medium_large' ) ?>);">
+			<article>
+				<div class="image" style="background-image: url(<?php the_post_thumbnail_url( 'medium_large' ) ?>);">></div>
 				<a href="<?php the_permalink() ?>">
 					<h2><?php the_title(); ?></h2>
 				</a>
