@@ -6,7 +6,7 @@
 
 $args = wp_parse_args( $atts, [
 	'post_type'   => 'location',
-	'post_parent' => 0,
+	// 'post_parent' => 0,
 ] );
 
 if ( is_singular( 'location' ) ) {
