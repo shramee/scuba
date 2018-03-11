@@ -14,3 +14,5 @@ function scuba_shortcode_from_template(  $atts = [], $content, $shortcode ) {
 }
 
 add_shortcode( 'location-loop', 'scuba_shortcode_from_template' );
+
+add_shortcode( 'location-dropdown', 'scuba_shortcode_from_template' );
