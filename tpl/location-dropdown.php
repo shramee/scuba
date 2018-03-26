@@ -10,7 +10,7 @@ $args = wp_parse_args( $atts, [
 	'post_parent' => 0,
 ] );
 if ( is_singular( 'location' ) ) {
-	$args['post_parent'] = wp_get_post_parent_id( get_the_ID() );
+	$args['post_parent'] = get_the_ID();
 }
 
 $the_query = new WP_Query( $args ); ?>
