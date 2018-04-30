@@ -82,7 +82,7 @@ class Scubahive {
 		$certification_card = get_user_meta( $user_id, 'certification_card', 1 );
 		$certification_card_full = get_user_meta( $user_id, 'certification_card_full', 1 );
 		if ( is_numeric( $certification_card ) ) {
-			$certification_card = wp_get_attachment_image_url( $certification_card, 'large' );
+			$certification_card = wp_get_attachment_image_url( $certification_card, 'medium' );
 			$certification_card_full = wp_get_attachment_image_url( $certification_card, 'full' );
 		}
 		?>

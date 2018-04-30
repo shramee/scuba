@@ -38,7 +38,7 @@ if ( is_wp_error( STUser_f::validation() ) ) {
 		update_user_meta( $user_id, 'certification_number', filter_input( INPUT_POST, 'certification_number' ) );
 		update_user_meta( $user_id, 'certification_agency', filter_input( INPUT_POST, 'certification_agency' ) );
 		update_user_meta( $user_id, 'equipment_preference', filter_input( INPUT_POST, 'equipment_preference' ) );
-		update_user_meta( $user_id, 'certification_card', wp_get_attachment_image_url( $attachment_id, 'large' ) );
+		update_user_meta( $user_id, 'certification_card', wp_get_attachment_image_url( $attachment_id, 'medium' ) );
 		update_user_meta( $user_id, 'certification_card_full', wp_get_attachment_image_url( $attachment_id, 'full' ) );
 		update_user_meta( $user_id, 'certification_card_id', $attachment_id );
 		?>
