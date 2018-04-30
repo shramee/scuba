@@ -9,6 +9,29 @@ Template:    traveler
 (optional values you can add: Theme URI, Author URI, Version)
 */
 @import url(../traveler/style.css);
+.scuba-btn-grp {
+  clear: both;
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  text-align: center; }
+  .scuba-btn-grp label {
+    flex: auto;
+    padding: .5em;
+    cursor: pointer;
+    border: 1px solid #aaa;
+    margin-right: -1px;
+    color: #544;
+    background-color: #ffffff;
+    text-transform: uppercase; }
+  .scuba-btn-grp input[type='radio'] {
+    position: absolute;
+    left: -9999em;
+    top: -9999em; }
+    .scuba-btn-grp input[type='radio']:checked + label {
+      background-color: #03a5ce;
+      color: #fff; }
+
 .locations-loop {
   display: flex;
   flex-wrap: wrap; }

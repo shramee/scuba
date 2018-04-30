@@ -1,0 +1,26 @@
+.scuba-btn-grp {
+	clear: both;
+	display: flex;
+	align-items: stretch;
+	flex-wrap: wrap;
+	text-align: center;
+	label {
+		flex: auto;
+		padding: .5em;
+		cursor: pointer;
+		border: 1px solid #aaa;
+		margin-right: -1px;
+		color: #544;
+		background-color: #ffffff;
+		text-transform: uppercase;
+	}
+	input[type='radio'] {
+		position: absolute;
+		left: -9999em;
+		top: -9999em;
+		&:checked + label {
+			background-color: #03a5ce;
+			color: #fff;
+		}
+	}
+}
