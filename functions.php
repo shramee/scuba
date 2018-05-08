@@ -35,6 +35,9 @@ class Scubahive {
 
 		add_action( 'show_user_profile', [ $this, 'profile_fields' ] );
 		add_action( 'edit_user_profile', [ $this, 'profile_fields' ] );
+
+		add_action( 'personal_options_update', [ $this, 'save_profile_fields' ] );
+		add_action( 'edit_user_profile_update', [ $this, 'save_profile_fields' ] );
 	}
 
 	public function wp() {
@@ -55,28 +58,42 @@ class Scubahive {
 		$fields = [];
 		$fields['nationality'] = [
 			'label' => __( 'Nationality', 'scuba' ),
-			'value' => get_user_meta( $user_id, 'nationality', 1 )
 		];
 		$fields['id_number'] = [
 			'label' => __( 'Certification ID number', 'scuba' ),
-			'value' => get_user_meta( $user_id, 'id_number', 1 )
+		];
+		$fields['country'] = [
+			'label' => __( 'Country', 'scuba' ),
+			'field' => '<select required id="country" name="country">' . implode( '', scuba_countries( '<option value="%id%::%title%">%title%</option>' ) ) . '</select>' .
+			           '<script>jQuery( "#country" ).val( "' . get_user_meta( $user_id, 'country', 1 ) . '" )</script>',
+		];
+		$fields['diving_location'] = [
+			'label' => __( 'Diving location', 'scuba' ),
+			'field' => '<select required id="diving_location" name="location">' . implode( '', scuba_locations( '<option value="%id%::%title%">%title%</option>' ) ) . '</select>' .
+								 '<script>jQuery( "#diving_location" ).val( "' . get_user_meta( $user_id, 'diving_location', 1 ) . '" )</script>',
 		];
 		$fields['certification_level'] = [
 			'label' => __( 'Certification level', 'scuba' ),
-			'value' => get_user_meta( $user_id, 'certification_level', 1 )
 		];
 		$fields['certification_number'] = [
 			'label' => __( 'Certification number', 'scuba' ),
-			'value' => get_user_meta( $user_id, 'certification_number', 1 )
 		];
 		$fields['certification_agency'] = [
 			'label' => __( 'Certification agency', 'scuba' ),
-			'value' => get_user_meta( $user_id, 'certification_agency', 1 )
+		];
+		$fields['contact_location'] = [
+			'label' => __( 'Contact location', 'scuba' ),
+		];
+		$fields['certification_agency'] = [
+			'label' => __( 'Languages spoken', 'scuba' ),
+		];
+		$fields['description'] = [
+			'label' => __( 'Operator description', 'scuba' ),
+			'type' => 'textbox',
 		];
 		$fields['equipment_preference'] = [
 			'label' => __( 'Equipment preference', 'scuba' ),
 			'type' => 'textbox',
-			'value' => get_user_meta( $user_id, 'equipment_preference', 1 )
 		];
 
 		$certification_card = get_user_meta( $user_id, 'certification_card', 1 );
@@ -90,9 +107,9 @@ class Scubahive {
 
 		<table class="form-table">
 			<tr>
-				<th><label for="certification-card">Operator type</label></th>
+				<th><label for="operator_type">Operator type</label></th>
 				<td>
-					<select required name="operator_type">
+					<select required id="operator_type" name="operator_type">
 
 						<option value="professional" <?php selected( $op_type, 'professional' ) ?>>
 							Dive Professional</option>
@@ -108,7 +125,6 @@ class Scubahive {
 
 						<option value="academy" <?php selected( $op_type, 'academy' ) ?>>
 							Dive Academy</option>
-
 					</select>
 				</td>
 			</tr>
@@ -121,17 +137,22 @@ class Scubahive {
 				</td>
 			</tr>
 			<?php foreach ( $fields as $k => $f ) {
+				$f['value'] = get_user_meta( $user_id, $k, 1 );
+				if ( ! isset( $f['type'] ) ) $f['type'] = 'text';
 				?>
 				<tr>
 					<th><label for="<?php echo $k ?>"><?php echo $f['label']; ?></label></th>
 					<td>
-						<?php if ( isset( $f['type'] ) && $f['type'] == 'textarea' ) {
+						<?php
+						if ( ! empty( $f['field'] ) ) {
+							echo $f['field'];
+						} else if ( $f['type'] == 'textarea' ) {
 							?>
 							<textarea name="<?php echo $k ?>" id="<?php echo $k ?>"><?php echo $f['value']; ?></textarea>
 							<?php
-						} else  {
+						} else {
 							?>
-							<input type="text" name="<?php echo $k ?>" id="<?php echo $k ?>" value="<?php echo $f['value']; ?>" class="regular-text" />
+							<input type="<?php echo $f['type']; ?>" name="<?php echo $k ?>" id="<?php echo $k ?>" value="<?php echo $f['value']; ?>" class="regular-text" />
 							<?php
 						} ?>
 					</td>
@@ -142,16 +163,25 @@ class Scubahive {
 		<?php
 	}
 
-	function save_profile_fields( $user_id ) {
-		if ( !current_user_can( 'edit_user', $user_id ) ) {
-			return false;
-		}
+	function save_user_meta( $user_id ) {
+		update_user_meta( $user_id, 'operator_type', filter_input( INPUT_POST, 'operator_type' ) );
 		update_user_meta( $user_id, 'nationality', filter_input( INPUT_POST, 'nationality' ) );
 		update_user_meta( $user_id, 'id_number', filter_input( INPUT_POST, 'id_number' ) );
+		update_user_meta( $user_id, 'country', filter_input( INPUT_POST, 'country' ) );
+		update_user_meta( $user_id, 'diving_location', filter_input( INPUT_POST, 'diving_location' ) );
 		update_user_meta( $user_id, 'certification_level', filter_input( INPUT_POST, 'certification_level' ) );
 		update_user_meta( $user_id, 'certification_number', filter_input( INPUT_POST, 'certification_number' ) );
 		update_user_meta( $user_id, 'certification_agency', filter_input( INPUT_POST, 'certification_agency' ) );
+		update_user_meta( $user_id, 'contact_location', filter_input( INPUT_POST, 'contact_location' ) );
+		update_user_meta( $user_id, 'languages', filter_input( INPUT_POST, 'languages' ) );
+		update_user_meta( $user_id, 'description', filter_input( INPUT_POST, 'description' ) );
 		update_user_meta( $user_id, 'equipment_preference', filter_input( INPUT_POST, 'equipment_preference' ) );
+	}
+
+	function save_profile_fields( $user_id ) {
+		if ( current_user_can( 'edit_user', $user_id ) ) {
+			$this->save_user_meta( $user_id );
+		}
 	}
 }
 

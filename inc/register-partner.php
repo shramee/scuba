@@ -31,13 +31,8 @@ if ( is_wp_error( STUser_f::validation() ) ) {
 
 		$attachment_id = media_handle_upload( 'certification_card', 0 );
 
-		update_user_meta( $user_id, 'operator_type', filter_input( INPUT_POST, 'operator_type' ) );
-		update_user_meta( $user_id, 'nationality', filter_input( INPUT_POST, 'nationality' ) );
-		update_user_meta( $user_id, 'id_number', filter_input( INPUT_POST, 'id_number' ) );
-		update_user_meta( $user_id, 'certification_level', filter_input( INPUT_POST, 'certification_level' ) );
-		update_user_meta( $user_id, 'certification_number', filter_input( INPUT_POST, 'certification_number' ) );
-		update_user_meta( $user_id, 'certification_agency', filter_input( INPUT_POST, 'certification_agency' ) );
-		update_user_meta( $user_id, 'equipment_preference', filter_input( INPUT_POST, 'equipment_preference' ) );
+		Scubahive::instance()->save_user_meta( $user_id );
+
 		update_user_meta( $user_id, 'certification_card', wp_get_attachment_image_url( $attachment_id, 'medium' ) );
 		update_user_meta( $user_id, 'certification_card_full', wp_get_attachment_image_url( $attachment_id, 'full' ) );
 		update_user_meta( $user_id, 'certification_card_id', $attachment_id );

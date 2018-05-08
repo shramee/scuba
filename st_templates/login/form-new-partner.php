@@ -36,7 +36,7 @@ if ( empty( $btn_register ) ) {
 	<div class="row mt30 ">
 		<div class="col-md-12">
 			<div class="form-group ">
-				<label for="field-operator-type">Operator Type <span class="color-red"> (*)</span></label>
+				<label for="field-operator-type">Operator Type <span class="color-red">*</span></label>
 			</div>
 			<div class="scuba-btn-grp">
 
@@ -70,7 +70,7 @@ if ( empty( $btn_register ) ) {
 		</div>
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-email"><?php st_the_language( 'email' ) ?><span class="color-red"> (*)</span></label>
+				<label for="field-email"><?php st_the_language( 'email' ) ?> <span class="color-red">*</span></label>
 				<input required id="field-email" name="email" class="form-control">
 			</div>
 		</div>
@@ -83,7 +83,7 @@ if ( empty( $btn_register ) ) {
 		</div>
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-password"><?php st_the_language( 'password' ) ?><span class="color-red"> (*)</span></label>
+				<label for="field-password"><?php st_the_language( 'password' ) ?> <span class="color-red">*</span></label>
 				<input required id="field-password" name="password" class="form-control" type="password">
 			</div>
 		</div>
@@ -92,14 +92,14 @@ if ( empty( $btn_register ) ) {
 
 	<!-- endregion Basic info -->
 
-	<!-- region ID info -->
+	<!-- region ID/Location info -->
 	<div class="row mt20 data_field">
 
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-nationality"><?php _e( 'Nationality', 'scuba' ) ?><span class="color-red"> (*)</span></label>
+				<label for="field-nationality"><?php _e( 'Nationality', 'scuba' ) ?> <span class="color-red">*</span></label>
 				<select required id="field-nationality" name="nationality" class="form-control">
-					<option value="">-- select one --</option>
+					<option><?php _e( 'Please choose...', 'scuba' ) ?></option>
 					<option value="New Zealander">New Zealander</option>
 					<option value="Afghan">Afghan</option>
 					<option value="Albanian">Albanian</option>
@@ -295,17 +295,40 @@ if ( empty( $btn_register ) ) {
 				</select>
 			</div>
 		</div>
-
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-id_number"><?php _e( 'Identity card/Passport number"', 'scuba' ) ?><span
+				<label for="field-id_number"><?php _e( 'Identity card/Passport number', 'scuba' ) ?><span
 						class="color-red"> (*)</span></label>
 				<input required id="field-id_number" name="id_number" class="form-control">
 			</div>
 		</div>
+		<div class="col-md-6">
+			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
+				<label for="field-country"><?php _e( 'Country', 'scuba' ) ?><span
+						class="color-red"> (*)</span></label>
+				<select required id="field-country" name="country" class="form-control">
+					<option><?php _e( 'Please choose...', 'scuba' ) ?></option>
+					<?php
+					scuba_countries( '<option value="%id%::%title%">%title%</option>', 'echo' )
+					?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
+				<label for="field-diving_location"><?php _e( 'Diving Location', 'scuba' ) ?><span
+						class="color-red"> (*)</span></label>
+				<select required id="field-diving_location" name="diving_location" class="form-control">
+					<option><?php _e( 'Please choose...', 'scuba' ) ?></option>
+					<?php
+					scuba_locations( '<option value="%id%::%title%" data-parent="%parent%">%title%</option>', 'echo' )
+					?>
+				</select>
+			</div>
+		</div>
 	</div>
 
-	<!-- endregion ID -->
+	<!-- endregion ID/Location info -->
 
 	<!-- region Dive certificationID info -->
 	<div class="row mt20 data_field">
@@ -336,7 +359,7 @@ if ( empty( $btn_register ) ) {
 
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-certification-card"><?php _e( 'Upload diving certification card (by photo)', 'scuba' ) ?><span
+				<label for="field-certification-card"><?php _e( 'Diving certification card (photo)', 'scuba' ) ?><span
 						class="color-red"> (*)</span></label>
 				<input required id="field-certification-card" name="certification_card" class="form-control" type="file">
 			</div>
@@ -345,20 +368,41 @@ if ( empty( $btn_register ) ) {
 
 	<!-- endregion Dive certificationID info -->
 
-	<!-- region Equipment info -->
+	<!-- region Description -->
 	<div class="row mt20 data_field">
 
+		<div class="col-md-6">
+			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
+				<label for="field-contact_location"><?php _e( 'Contact location (for profile page)', 'scuba' ) ?> <span class="color-red">*</span></label>
+				<input required id="field-contact_location" name="contact_location" class="form-control">
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
+				<label for="field-languages"><?php _e( 'Languages spoken', 'scuba' ) ?><span
+						class="color-red"> (*)</span></label>
+				<input required id="field-languages" name="languages" class="form-control">
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
+				<label
+					for="field-description"><?php _e( 'Operator description', 'scuba' ) ?>
+					<span class="color-red">*</span></label>
+				<textarea required id="field-description" name="description" class="form-control"></textarea>
+			</div>
+		</div>
 		<div class="col-md-12">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label
 					for="field-equipment-preference"><?php _e( 'Equipment rental preference and size (Mask, BCD, Regulator, Fins)', 'scuba' ) ?>
-					<span class="color-red"> (*)</span></label>
+					<span class="color-red">*</span></label>
 				<textarea required id="field-equipment-preference" name="equipment_preference" class="form-control"></textarea>
 			</div>
 		</div>
 
 	</div>
-	<!-- endregion Equipment info -->
+	<!-- endregion Description -->
 
 	<div class="checkbox st_check_term_conditions mt20">
 		<label>
@@ -383,3 +427,20 @@ if ( empty( $btn_register ) ) {
 		<button class="btn btn-primary btn-lg" type="submit"><?php echo esc_html( $btn_register ) ?></button>
 	</div>
 </form>
+
+<script>
+	jQuery( function ( $ ) {
+		var
+			$country = $( '#field-country' ),
+			$location = $( '#field-location' );
+
+		$location.children( '[value]' ).hide();
+
+		$country.change( function () {
+			var parent = this.value.split( '::' )[0];
+			$location.val( '' );
+			$location.children( '[value]' ).hide();
+			$location.children( '[data-parent="' + parent + '"]' ).show();
+		} );
+	} );
+</script>
