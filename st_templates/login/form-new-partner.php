@@ -77,7 +77,7 @@ if ( empty( $btn_register ) ) {
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-user_name"><?php _e( "User Name", 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<input required id="field-user_name" name="user_name" class="form-control">
 			</div>
 		</div>
@@ -99,7 +99,7 @@ if ( empty( $btn_register ) ) {
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-nationality"><?php _e( 'Nationality', 'scuba' ) ?> <span class="color-red">*</span></label>
 				<select required id="field-nationality" name="nationality" class="form-control">
-					<option><?php _e( 'Please choose...', 'scuba' ) ?></option>
+					<option value=""><?php _e( 'Please choose...', 'scuba' ) ?></option>
 					<option value="New Zealander">New Zealander</option>
 					<option value="Afghan">Afghan</option>
 					<option value="Albanian">Albanian</option>
@@ -298,16 +298,16 @@ if ( empty( $btn_register ) ) {
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-id_number"><?php _e( 'Identity card/Passport number', 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<input required id="field-id_number" name="id_number" class="form-control">
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-country"><?php _e( 'Country', 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<select required id="field-country" name="country" class="form-control">
-					<option><?php _e( 'Please choose...', 'scuba' ) ?></option>
+					<option value=""><?php _e( 'Please choose...', 'scuba' ) ?></option>
 					<?php
 					scuba_countries( '<option value="%id%::%title%">%title%</option>', 'echo' )
 					?>
@@ -317,9 +317,9 @@ if ( empty( $btn_register ) ) {
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-diving_location"><?php _e( 'Diving Location', 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<select required id="field-diving_location" name="diving_location" class="form-control">
-					<option><?php _e( 'Please choose...', 'scuba' ) ?></option>
+					<option value=""><?php _e( 'Please choose...', 'scuba' ) ?></option>
 					<?php
 					scuba_locations( '<option value="%id%::%title%" data-parent="%parent%">%title%</option>', 'echo' )
 					?>
@@ -336,7 +336,7 @@ if ( empty( $btn_register ) ) {
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-certification-level"><?php _e( 'Dive certification level', 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<input required id="field-certification-level" name="certification_level" class="form-control">
 			</div>
 		</div>
@@ -344,7 +344,7 @@ if ( empty( $btn_register ) ) {
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-certification-number"><?php _e( 'Diver number (on certification card)', 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<input required id="field-certification-number" name="certification_number" class="form-control">
 			</div>
 		</div>
@@ -352,7 +352,7 @@ if ( empty( $btn_register ) ) {
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-certification-agency"><?php _e( 'Dive certification agency', 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<input required id="field-certification-agency" name="certification_agency" class="form-control">
 			</div>
 		</div>
@@ -360,7 +360,7 @@ if ( empty( $btn_register ) ) {
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-certification-card"><?php _e( 'Diving certification card (photo)', 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<input required id="field-certification-card" name="certification_card" class="form-control" type="file">
 			</div>
 		</div>
@@ -380,7 +380,7 @@ if ( empty( $btn_register ) ) {
 		<div class="col-md-6">
 			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
 				<label for="field-languages"><?php _e( 'Languages spoken', 'scuba' ) ?><span
-						class="color-red"> (*)</span></label>
+						class="color-red"> *</span></label>
 				<input required id="field-languages" name="languages" class="form-control">
 			</div>
 		</div>
@@ -432,7 +432,7 @@ if ( empty( $btn_register ) ) {
 	jQuery( function ( $ ) {
 		var
 			$country = $( '#field-country' ),
-			$location = $( '#field-location' );
+			$location = $( '#field-diving_location' );
 
 		$location.children( '[value]' ).hide();
 
