@@ -33,6 +33,7 @@ class Scubahive {
 		include 'inc/filters.php';
 
 		add_action( 'wp', [ $this, 'wp' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'vc_basic_grid_template_filter', [ $this, 'vc_basic_grid_template_filter' ] );
 
 		add_action( 'show_user_profile', [ $this, 'profile_fields' ] );
@@ -44,6 +45,11 @@ class Scubahive {
 
 	public function wp() {
 		self::$home = is_front_page();
+	}
+
+	public function enqueue() {
+		wp_enqueue_style( 'scuba-main', get_stylesheet_directory_uri() . '/style.css' );
+		wp_enqueue_style( 'scuba-parent', get_template_directory_uri() . '/style.css' );
 	}
 
 	public function vc_basic_grid_template_filter( $return ) {
