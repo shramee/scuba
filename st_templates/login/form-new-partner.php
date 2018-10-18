@@ -12,11 +12,12 @@
 wp_enqueue_script( 'user.js' );
 
 $_REQUEST['register_as'] = 'partner';
-$_POST['register_as'] = 'partner';
+$_POST['register_as']    = 'partner';
 
 $reset = 'false';
 if ( ! empty( $_REQUEST['btn_reg'] ) ) {
 	include get_stylesheet_directory() . '/inc/register-partner.php';
+
 	return;
 }
 $class_form = "";
@@ -27,411 +28,701 @@ $btn_register = get_post_meta( get_the_ID(), 'btn_register', true );
 if ( empty( $btn_register ) ) {
 	$btn_register = __( "Register", ST_TEXTDOMAIN );
 }
+
+$fields_renderer = new Shramee_Form_Fields( [
+	'required'  => 1,
+	'field_tpl' => '<div class="col-md-6"><div class="form-group">%label%%input%</div></div>',
+] );
 ?>
 
-<form class="register_form" data-reset="<?php echo esc_attr( $reset ) ?>" method="post" enctype="multipart/form-data"
-			action="<?php echo esc_url( add_query_arg( array( 'url' => STInput::request( 'url' ) ) ) ) ?>">
-	<input type="hidden" name="register_as" value="<?php echo $_REQUEST['register_as'] ?>">
+<?php
 
-	<div class="row mt30 ">
-		<div class="col-md-12">
-			<div class="form-group ">
-				<label for="field-operator-type">Operator Type <span class="color-red">*</span></label>
-			</div>
-			<div class="scuba-btn-grp">
+$nationality_ops = [
+	'New Zealander',
+	'Afghan',
+	'Albanian',
+	'Algerian',
+	'American',
+	'Andorran',
+	'Angolan',
+	'Antiguans',
+	'Argentinean',
+	'Armenian',
+	'Australian',
+	'Austrian',
+	'Azerbaijani',
+	'Bahamian',
+	'Bahraini',
+	'Bangladeshi',
+	'Barbadian',
+	'Barbudans',
+	'Batswana',
+	'Belarusian',
+	'Belgian',
+	'Belizean',
+	'Beninese',
+	'Bhutanese',
+	'Bolivian',
+	'Bosnian',
+	'Brazilian',
+	'British',
+	'Bruneian',
+	'Bulgarian',
+	'Burkinabe',
+	'Burmese',
+	'Burundian',
+	'Cambodian',
+	'Cameroonian',
+	'Canadian',
+	'Cape Verdean',
+	'Central African',
+	'Chadian',
+	'Chilean',
+	'Chinese',
+	'Colombian',
+	'Comoran',
+	'Congolese',
+	'Costa Rican',
+	'Croatian',
+	'Cuban',
+	'Cypriot',
+	'Czech',
+	'Danish',
+	'Djibouti',
+	'Dominican',
+	'Dutch',
+	'East Timorese',
+	'Ecuadorean',
+	'Egyptian',
+	'Emirian',
+	'Equatorial Guinean',
+	'Eritrean',
+	'Estonian',
+	'Ethiopian',
+	'Fijian',
+	'Filipino',
+	'Finnish',
+	'French',
+	'Gabonese',
+	'Gambian',
+	'Georgian',
+	'German',
+	'Ghanaian',
+	'Greek',
+	'Grenadian',
+	'Guatemalan',
+	'Guinea-Bissauan',
+	'Guinean',
+	'Guyanese',
+	'Haitian',
+	'Herzegovinian',
+	'Honduran',
+	'Hungarian',
+	'Icelander',
+	'Indian',
+	'Indonesian',
+	'Iranian',
+	'Iraqi',
+	'Irish',
+	'Israeli',
+	'Italian',
+	'Ivorian',
+	'Jamaican',
+	'Japanese',
+	'Jordanian',
+	'Kazakhstani',
+	'Kenyan',
+	'Kittian and Nevisian',
+	'Kuwaiti',
+	'Kyrgyz',
+	'Laotian',
+	'Latvian',
+	'Lebanese',
+	'Liberian',
+	'Libyan',
+	'Liechtensteiner',
+	'Lithuanian',
+	'Luxembourger',
+	'Macedonian',
+	'Malagasy',
+	'Malawian',
+	'Malaysian',
+	'Maldivan',
+	'Malian',
+	'Maltese',
+	'Marshallese',
+	'Mauritanian',
+	'Mauritian',
+	'Mexican',
+	'Micronesian',
+	'Moldovan',
+	'Monacan',
+	'Mongolian',
+	'Moroccan',
+	'Mosotho',
+	'Motswana',
+	'Mozambican',
+	'Namibian',
+	'Nauruan',
+	'Nepalese',
+	'Ni-Vanuatu',
+	'Nicaraguan',
+	'Nigerien',
+	'North Korean',
+	'Northern Irish',
+	'Norwegian',
+	'Omani',
+	'Pakistani',
+	'Palauan',
+	'Panamanian',
+	'Papua New Guinean',
+	'Paraguayan',
+	'Peruvian',
+	'Polish',
+	'Portuguese',
+	'Qatari',
+	'Romanian',
+	'Russian',
+	'Rwandan',
+	'Saint Lucian',
+	'Salvadoran',
+	'Samoan',
+	'San Marinese',
+	'Sao Tomean',
+	'Saudi',
+	'Scottish',
+	'Senegalese',
+	'Serbian',
+	'Seychellois',
+	'Sierra Leonean',
+	'Singaporean',
+	'Slovakian',
+	'Slovenian',
+	'Solomon Islander',
+	'Somali',
+	'South African',
+	'South Korean',
+	'Spanish',
+	'Sri Lankan',
+	'Sudanese',
+	'Surinamer',
+	'Swazi',
+	'Swedish',
+	'Swiss',
+	'Syrian',
+	'Taiwanese',
+	'Tajik',
+	'Tanzanian',
+	'Thai',
+	'Togolese',
+	'Tongan',
+	'Trinidadian or Tobagonian',
+	'Tunisian',
+	'Turkish',
+	'Tuvaluan',
+	'Ugandan',
+	'Ukrainian',
+	'Uruguayan',
+	'Uzbekistani',
+	'Venezuelan',
+	'Vietnamese',
+	'Welsh',
+	'Yemenite',
+	'Zambian',
+	'Zimbabwean',
+];
+$country_ops     = [
+	"Afghanistan",
+	"Albania",
+	"Algeria",
+	"American Samoa",
+	"Andorra",
+	"Angola",
+	"Anguilla",
+	"Antarctica",
+	"Antigua and Barbuda",
+	"Argentina",
+	"Armenia",
+	"Aruba",
+	"Australia",
+	"Austria",
+	"Azerbaijan",
+	"Bahamas",
+	"Bahrain",
+	"Bangladesh",
+	"Barbados",
+	"Belarus",
+	"Belgium",
+	"Belize",
+	"Benin",
+	"Bermuda",
+	"Bhutan",
+	"Bolivia",
+	"Bosnia and Herzegovina",
+	"Botswana",
+	"Bouvet Island",
+	"Brazil",
+	"British Indian Ocean Territory",
+	"Brunei Darussalam",
+	"Bulgaria",
+	"Burkina Faso",
+	"Burundi",
+	"Cambodia",
+	"Cameroon",
+	"Canada",
+	"Cape Verde",
+	"Cayman Islands",
+	"Central African Republic",
+	"Chad",
+	"Chile",
+	"China",
+	"Christmas Island",
+	"Cocos (Keeling) Islands",
+	"Colombia",
+	"Comoros",
+	"Congo",
+	"Congo, the Democratic Republic of the",
+	"Cook Islands",
+	"Costa Rica",
+	"Cote D'Ivoire",
+	"Croatia",
+	"Cuba",
+	"Cyprus",
+	"Czech Republic",
+	"Denmark",
+	"Djibouti",
+	"Dominica",
+	"Dominican Republic",
+	"Ecuador",
+	"Egypt",
+	"El Salvador",
+	"Equatorial Guinea",
+	"Eritrea",
+	"Estonia",
+	"Ethiopia",
+	"Falkland Islands (Malvinas)",
+	"Faroe Islands",
+	"Fiji",
+	"Finland",
+	"France",
+	"French Guiana",
+	"French Polynesia",
+	"French Southern Territories",
+	"Gabon",
+	"Gambia",
+	"Georgia",
+	"Germany",
+	"Ghana",
+	"Gibraltar",
+	"Greece",
+	"Greenland",
+	"Grenada",
+	"Guadeloupe",
+	"Guam",
+	"Guatemala",
+	"Guinea",
+	"Guinea-Bissau",
+	"Guyana",
+	"Haiti",
+	"Heard Island and Mcdonald Islands",
+	"Holy See (Vatican City State)",
+	"Honduras",
+	"Hong Kong",
+	"Hungary",
+	"Iceland",
+	"India",
+	"Indonesia",
+	"Iran, Islamic Republic of",
+	"Iraq",
+	"Ireland",
+	"Israel",
+	"Italy",
+	"Jamaica",
+	"Japan",
+	"Jordan",
+	"Kazakhstan",
+	"Kenya",
+	"Kiribati",
+	"Korea, Democratic People's Republic of",
+	"Korea, Republic of",
+	"Kuwait",
+	"Kyrgyzstan",
+	"Lao People's Democratic Republic",
+	"Latvia",
+	"Lebanon",
+	"Lesotho",
+	"Liberia",
+	"Libyan Arab Jamahiriya",
+	"Liechtenstein",
+	"Lithuania",
+	"Luxembourg",
+	"Macao",
+	"Macedonia, the Former Yugoslav Republic of",
+	"Madagascar",
+	"Malawi",
+	"Malaysia",
+	"Maldives",
+	"Mali",
+	"Malta",
+	"Marshall Islands",
+	"Martinique",
+	"Mauritania",
+	"Mauritius",
+	"Mayotte",
+	"Mexico",
+	"Micronesia, Federated States of",
+	"Moldova, Republic of",
+	"Monaco",
+	"Mongolia",
+	"Montserrat",
+	"Morocco",
+	"Mozambique",
+	"Myanmar",
+	"Namibia",
+	"Nauru",
+	"Nepal",
+	"Netherlands",
+	"Netherlands Antilles",
+	"New Caledonia",
+	"New Zealand",
+	"Nicaragua",
+	"Niger",
+	"Nigeria",
+	"Niue",
+	"Norfolk Island",
+	"Northern Mariana Islands",
+	"Norway",
+	"Oman",
+	"Pakistan",
+	"Palau",
+	"Palestinian Territory, Occupied",
+	"Panama",
+	"Papua New Guinea",
+	"Paraguay",
+	"Peru",
+	"Philippines",
+	"Pitcairn",
+	"Poland",
+	"Portugal",
+	"Puerto Rico",
+	"Qatar",
+	"Reunion",
+	"Romania",
+	"Russian Federation",
+	"Rwanda",
+	"Saint Helena",
+	"Saint Kitts and Nevis",
+	"Saint Lucia",
+	"Saint Pierre and Miquelon",
+	"Saint Vincent and the Grenadines",
+	"Samoa",
+	"San Marino",
+	"Sao Tome and Principe",
+	"Saudi Arabia",
+	"Senegal",
+	"Serbia and Montenegro",
+	"Seychelles",
+	"Sierra Leone",
+	"Singapore",
+	"Slovakia",
+	"Slovenia",
+	"Solomon Islands",
+	"Somalia",
+	"South Africa",
+	"South Georgia and the South Sandwich Islands",
+	"Spain",
+	"Sri Lanka",
+	"Sudan",
+	"Suriname",
+	"Svalbard and Jan Mayen",
+	"Swaziland",
+	"Sweden",
+	"Switzerland",
+	"Syrian Arab Republic",
+	"Taiwan, Province of China",
+	"Tajikistan",
+	"Tanzania, United Republic of",
+	"Thailand",
+	"Timor-Leste",
+	"Togo",
+	"Tokelau",
+	"Tonga",
+	"Trinidad and Tobago",
+	"Tunisia",
+	"Turkey",
+	"Turkmenistan",
+	"Turks and Caicos Islands",
+	"Tuvalu",
+	"Uganda",
+	"Ukraine",
+	"United Arab Emirates",
+	"United Kingdom",
+	"United States",
+	"United States Minor Outlying Islands",
+	"Uruguay",
+	"Uzbekistan",
+	"Vanuatu",
+	"Venezuela",
+	"Viet Nam",
+	"Virgin Islands, British",
+	"Virgin Islands, U.s.",
+	"Wallis and Futuna",
+	"Western Sahara",
+	"Yemen",
+	"Zambia",
+	"Zimbabwe",
+];
 
-				<input type="radio" required name="operator_type" id="operator-type-professional" value="professional">
-				<label for="operator-type-professional">Dive Professional</label>
+if ( isset( $_GET['individual'] ) ) {
+	?>
+	<h2 class="text-center"><?php _e( 'Register as Diving professional', 'scuba' ) ?></h2>
+	<p class="text-center">
+		<?php _e( 'Want to register as organisation?', 'scuba' ) ?>
+		<a href="?"><?php _e( 'Click here', 'scuba' ) ?></a>
+	</p>
+	<form id="professional-registration-form" class="register_form" data-reset="<?php echo esc_attr( $reset ) ?>" method="post" enctype="multipart/form-data"
+				action="<?php echo esc_url( add_query_arg( array( 'url' => STInput::request( 'url' ) ) ) ) ?>">
+		<input type="hidden" name="register_as" value="<?php echo $_REQUEST['register_as'] ?>">
+		<input type="hidden" name="operator_type" value="professional">
+		<div class="row mt20 data_field">
+			<?php
 
-				<input type="radio" required name="operator_type" id="operator-type-center" value="center">
-				<label for="operator-type-center">Dive Center</label>
-
-				<input type="radio" required name="operator_type" id="operator-type-resort" value="resort">
-				<label for="operator-type-resort">Dive Resort</label>
-
-				<input type="radio" required name="operator_type" id="operator-type-liveaboard" value="liveaboard">
-				<label for="operator-type-liveaboard">Liveaboard</label>
-
-				<input type="radio" required name="operator_type" id="operator-type-academy" value="academy">
-				<label for="operator-type-academy">Dive Academy</label>
-
-			</div>
+			$fields_renderer->render( [
+				'full_name'   => __( 'Full name', 'scuba' ),
+				'user_name'   => __( 'User Name', 'scuba' ),
+				'email'       => __( 'Email', 'scuba' ),
+				'password'    => __( 'Password', 'scuba' ),
+				'contact'     => [
+					'label' => __( 'Contact number / mobile', 'scuba' ),
+					'type'  => 'tel',
+				],
+				'nationality' => [
+					'label'   => __( 'Nationality', 'scuba' ),
+					'options' => $nationality_ops,
+					'type'    => 'select',
+				],
+				'address'     => __( 'Address', 'scuba' ),
+				'state'       => __( 'State', 'scuba' ),
+				'Postcode'    => __( 'Postcode', 'scuba' ),
+				'country'     => [
+					'label'   => __( 'Country', 'scuba' ),
+					'options' => $country_ops,
+					'type'    => 'select',
+				],
+				'dive_agency' => 'Dive Agency (e.g. PADI, SSI, NAUI, etc)',
+				'dive_rating' => 'Dive Pro Rating (e.g. Dive master, instructor)',
+				'dive_number' => 'Dive Pro Number',
+				'certification_card' => [
+					'label' => __( 'Dive pro card photo', 'scuba' ),
+					'type'  => 'file',
+				],
+			] );
+			?>
 		</div>
-	</div>
 
-	<!-- region Basic info -->
+		<?php
+		/*
+			DIVE PROFESSIONALS
 
-	<div class="row mt20 data_field">
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-full_name"><?php _e( 'Person/Organisation name' ) ?></label>
-				<input required id="field-full_name" name="full_name" class="form-control">
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-email"><?php st_the_language( 'email' ) ?> <span class="color-red">*</span></label>
-				<input required id="field-email" name="email" class="form-control">
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-user_name"><?php _e( "User Name", 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<input required id="field-user_name" name="user_name" class="form-control">
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-password"><?php st_the_language( 'password' ) ?> <span class="color-red">*</span></label>
-				<input required id="field-password" name="password" class="form-control" type="password">
-			</div>
-		</div>
 
-	</div>
+			Full name
+			Nationality
+			Identity card / Passport number
+			Email
+			Contact number / mobile
+			Address
+			---State
+			---Postcode
+			---Country
+			Dive Agency (e.g. PADI, SSI, NAUI, etc)
+			Dive Pro Rating (e.g. Dive master, instructor)
+			Dive Pro Number
+			Upload photo of dive pro card
 
-	<!-- endregion Basic info -->
 
-	<!-- region ID/Location info -->
-	<div class="row mt20 data_field">
+			DIVE OPERATOR
 
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-nationality"><?php _e( 'Nationality', 'scuba' ) ?> <span class="color-red">*</span></label>
-				<select required id="field-nationality" name="nationality" class="form-control">
-					<option value=""><?php _e( 'Please choose...', 'scuba' ) ?></option>
-					<option value="New Zealander">New Zealander</option>
-					<option value="Afghan">Afghan</option>
-					<option value="Albanian">Albanian</option>
-					<option value="Algerian">Algerian</option>
-					<option value="American">American</option>
-					<option value="Andorran">Andorran</option>
-					<option value="Angolan">Angolan</option>
-					<option value="Antiguans">Antiguans</option>
-					<option value="Argentinean">Argentinean</option>
-					<option value="Armenian">Armenian</option>
-					<option value="Australian">Australian</option>
-					<option value="Austrian">Austrian</option>
-					<option value="Azerbaijani">Azerbaijani</option>
-					<option value="Bahamian">Bahamian</option>
-					<option value="Bahraini">Bahraini</option>
-					<option value="Bangladeshi">Bangladeshi</option>
-					<option value="Barbadian">Barbadian</option>
-					<option value="Barbudans">Barbudans</option>
-					<option value="Batswana">Batswana</option>
-					<option value="Belarusian">Belarusian</option>
-					<option value="Belgian">Belgian</option>
-					<option value="Belizean">Belizean</option>
-					<option value="Beninese">Beninese</option>
-					<option value="Bhutanese">Bhutanese</option>
-					<option value="Bolivian">Bolivian</option>
-					<option value="Bosnian">Bosnian</option>
-					<option value="Brazilian">Brazilian</option>
-					<option value="British">British</option>
-					<option value="Bruneian">Bruneian</option>
-					<option value="Bulgarian">Bulgarian</option>
-					<option value="Burkinabe">Burkinabe</option>
-					<option value="Burmese">Burmese</option>
-					<option value="Burundian">Burundian</option>
-					<option value="Cambodian">Cambodian</option>
-					<option value="Cameroonian">Cameroonian</option>
-					<option value="Canadian">Canadian</option>
-					<option value="Cape Verdean">Cape Verdean</option>
-					<option value="Central African">Central African</option>
-					<option value="Chadian">Chadian</option>
-					<option value="Chilean">Chilean</option>
-					<option value="Chinese">Chinese</option>
-					<option value="Colombian">Colombian</option>
-					<option value="Comoran">Comoran</option>
-					<option value="Congolese">Congolese</option>
-					<option value="Costa Rican">Costa Rican</option>
-					<option value="Croatian">Croatian</option>
-					<option value="Cuban">Cuban</option>
-					<option value="Cypriot">Cypriot</option>
-					<option value="Czech">Czech</option>
-					<option value="Danish">Danish</option>
-					<option value="Djibouti">Djibouti</option>
-					<option value="Dominican">Dominican</option>
-					<option value="Dutch">Dutch</option>
-					<option value="East Timorese">East Timorese</option>
-					<option value="Ecuadorean">Ecuadorean</option>
-					<option value="Egyptian">Egyptian</option>
-					<option value="Emirian">Emirian</option>
-					<option value="Equatorial Guinean">Equatorial Guinean</option>
-					<option value="Eritrean">Eritrean</option>
-					<option value="Estonian">Estonian</option>
-					<option value="Ethiopian">Ethiopian</option>
-					<option value="Fijian">Fijian</option>
-					<option value="Filipino">Filipino</option>
-					<option value="Finnish">Finnish</option>
-					<option value="French">French</option>
-					<option value="Gabonese">Gabonese</option>
-					<option value="Gambian">Gambian</option>
-					<option value="Georgian">Georgian</option>
-					<option value="German">German</option>
-					<option value="Ghanaian">Ghanaian</option>
-					<option value="Greek">Greek</option>
-					<option value="Grenadian">Grenadian</option>
-					<option value="Guatemalan">Guatemalan</option>
-					<option value="Guinea-Bissauan">Guinea-Bissauan</option>
-					<option value="Guinean">Guinean</option>
-					<option value="Guyanese">Guyanese</option>
-					<option value="Haitian">Haitian</option>
-					<option value="Herzegovinian">Herzegovinian</option>
-					<option value="Honduran">Honduran</option>
-					<option value="Hungarian">Hungarian</option>
-					<option value="Icelander">Icelander</option>
-					<option value="Indian">Indian</option>
-					<option value="Indonesian">Indonesian</option>
-					<option value="Iranian">Iranian</option>
-					<option value="Iraqi">Iraqi</option>
-					<option value="Irish">Irish</option>
-					<option value="Israeli">Israeli</option>
-					<option value="Italian">Italian</option>
-					<option value="Ivorian">Ivorian</option>
-					<option value="Jamaican">Jamaican</option>
-					<option value="Japanese">Japanese</option>
-					<option value="Jordanian">Jordanian</option>
-					<option value="Kazakhstani">Kazakhstani</option>
-					<option value="Kenyan">Kenyan</option>
-					<option value="Kittian and Nevisian">Kittian and Nevisian</option>
-					<option value="Kuwaiti">Kuwaiti</option>
-					<option value="Kyrgyz">Kyrgyz</option>
-					<option value="Laotian">Laotian</option>
-					<option value="Latvian">Latvian</option>
-					<option value="Lebanese">Lebanese</option>
-					<option value="Liberian">Liberian</option>
-					<option value="Libyan">Libyan</option>
-					<option value="Liechtensteiner">Liechtensteiner</option>
-					<option value="Lithuanian">Lithuanian</option>
-					<option value="Luxembourger">Luxembourger</option>
-					<option value="Macedonian">Macedonian</option>
-					<option value="Malagasy">Malagasy</option>
-					<option value="Malawian">Malawian</option>
-					<option value="Malaysian">Malaysian</option>
-					<option value="Maldivan">Maldivan</option>
-					<option value="Malian">Malian</option>
-					<option value="Maltese">Maltese</option>
-					<option value="Marshallese">Marshallese</option>
-					<option value="Mauritanian">Mauritanian</option>
-					<option value="Mauritian">Mauritian</option>
-					<option value="Mexican">Mexican</option>
-					<option value="Micronesian">Micronesian</option>
-					<option value="Moldovan">Moldovan</option>
-					<option value="Monacan">Monacan</option>
-					<option value="Mongolian">Mongolian</option>
-					<option value="Moroccan">Moroccan</option>
-					<option value="Mosotho">Mosotho</option>
-					<option value="Motswana">Motswana</option>
-					<option value="Mozambican">Mozambican</option>
-					<option value="Namibian">Namibian</option>
-					<option value="Nauruan">Nauruan</option>
-					<option value="Nepalese">Nepalese</option>
-					<option value="Ni-Vanuatu">Ni-Vanuatu</option>
-					<option value="Nicaraguan">Nicaraguan</option>
-					<option value="Nigerien">Nigerien</option>
-					<option value="North Korean">North Korean</option>
-					<option value="Northern Irish">Northern Irish</option>
-					<option value="Norwegian">Norwegian</option>
-					<option value="Omani">Omani</option>
-					<option value="Pakistani">Pakistani</option>
-					<option value="Palauan">Palauan</option>
-					<option value="Panamanian">Panamanian</option>
-					<option value="Papua New Guinean">Papua New Guinean</option>
-					<option value="Paraguayan">Paraguayan</option>
-					<option value="Peruvian">Peruvian</option>
-					<option value="Polish">Polish</option>
-					<option value="Portuguese">Portuguese</option>
-					<option value="Qatari">Qatari</option>
-					<option value="Romanian">Romanian</option>
-					<option value="Russian">Russian</option>
-					<option value="Rwandan">Rwandan</option>
-					<option value="Saint Lucian">Saint Lucian</option>
-					<option value="Salvadoran">Salvadoran</option>
-					<option value="Samoan">Samoan</option>
-					<option value="San Marinese">San Marinese</option>
-					<option value="Sao Tomean">Sao Tomean</option>
-					<option value="Saudi">Saudi</option>
-					<option value="Scottish">Scottish</option>
-					<option value="Senegalese">Senegalese</option>
-					<option value="Serbian">Serbian</option>
-					<option value="Seychellois">Seychellois</option>
-					<option value="Sierra Leonean">Sierra Leonean</option>
-					<option value="Singaporean">Singaporean</option>
-					<option value="Slovakian">Slovakian</option>
-					<option value="Slovenian">Slovenian</option>
-					<option value="Solomon Islander">Solomon Islander</option>
-					<option value="Somali">Somali</option>
-					<option value="South African">South African</option>
-					<option value="South Korean">South Korean</option>
-					<option value="Spanish">Spanish</option>
-					<option value="Sri Lankan">Sri Lankan</option>
-					<option value="Sudanese">Sudanese</option>
-					<option value="Surinamer">Surinamer</option>
-					<option value="Swazi">Swazi</option>
-					<option value="Swedish">Swedish</option>
-					<option value="Swiss">Swiss</option>
-					<option value="Syrian">Syrian</option>
-					<option value="Taiwanese">Taiwanese</option>
-					<option value="Tajik">Tajik</option>
-					<option value="Tanzanian">Tanzanian</option>
-					<option value="Thai">Thai</option>
-					<option value="Togolese">Togolese</option>
-					<option value="Tongan">Tongan</option>
-					<option value="Trinidadian or Tobagonian">Trinidadian or Tobagonian</option>
-					<option value="Tunisian">Tunisian</option>
-					<option value="Turkish">Turkish</option>
-					<option value="Tuvaluan">Tuvaluan</option>
-					<option value="Ugandan">Ugandan</option>
-					<option value="Ukrainian">Ukrainian</option>
-					<option value="Uruguayan">Uruguayan</option>
-					<option value="Uzbekistani">Uzbekistani</option>
-					<option value="Venezuelan">Venezuelan</option>
-					<option value="Vietnamese">Vietnamese</option>
-					<option value="Welsh">Welsh</option>
-					<option value="Yemenite">Yemenite</option>
-					<option value="Zambian">Zambian</option>
-					<option value="Zimbabwean">Zimbabwean</option>
-				</select>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-id_number"><?php _e( 'Identity card/Passport number', 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<input required id="field-id_number" name="id_number" class="form-control">
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-country"><?php _e( 'Country', 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<select required id="field-country" name="country" class="form-control">
-					<option value=""><?php _e( 'Please choose...', 'scuba' ) ?></option>
-					<?php
-					scuba_countries( '<option value="%id%::%title%">%title%</option>', 'echo' )
-					?>
-				</select>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-diving_location"><?php _e( 'Diving Location', 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<select required id="field-diving_location" name="diving_location" class="form-control">
-					<option value=""><?php _e( 'Please choose...', 'scuba' ) ?></option>
-					<?php
-					scuba_locations( '<option value="%id%::%title%" data-parent="%parent%">%title%</option>', 'echo' )
-					?>
-				</select>
-			</div>
-		</div>
-	</div>
 
-	<!-- endregion ID/Location info -->
-
-	<!-- region Dive certificationID info -->
-	<div class="row mt20 data_field">
-
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-certification-level"><?php _e( 'Dive certification level', 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<input required id="field-certification-level" name="certification_level" class="form-control">
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-certification-number"><?php _e( 'Diver number (on certification card)', 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<input required id="field-certification-number" name="certification_number" class="form-control">
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-certification-agency"><?php _e( 'Dive certification agency', 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<input required id="field-certification-agency" name="certification_agency" class="form-control">
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-certification-card"><?php _e( 'Diving certification card (photo)', 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<input required id="field-certification-card" name="certification_card" class="form-control" type="file">
-			</div>
-		</div>
-	</div>
-
-	<!-- endregion Dive certificationID info -->
-
-	<!-- region Description -->
-	<div class="row mt20 data_field">
-
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-contact_location"><?php _e( 'Contact location (for profile page)', 'scuba' ) ?> <span class="color-red">*</span></label>
-				<input required id="field-contact_location" name="contact_location" class="form-control">
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label for="field-languages"><?php _e( 'Languages spoken', 'scuba' ) ?><span
-						class="color-red"> *</span></label>
-				<input required id="field-languages" name="languages" class="form-control">
-			</div>
-		</div>
-		<div class="col-md-12">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label
-					for="field-description"><?php _e( 'Operator description', 'scuba' ) ?>
-					<span class="color-red">*</span></label>
-				<textarea required id="field-description" name="description" class="form-control"></textarea>
-			</div>
-		</div>
-		<div class="col-md-12">
-			<div class="form-group <?php echo esc_attr( $class_form ); ?>">
-				<label
-					for="field-equipment-preference"><?php _e( 'Equipment rental preference and size (Mask, BCD, Regulator, Fins)', 'scuba' ) ?>
-					<span class="color-red">*</span></label>
-				<textarea required id="field-equipment-preference" name="equipment_preference" class="form-control"></textarea>
-			</div>
-		</div>
-
-	</div>
-	<!-- endregion Description -->
-
-	<div class="checkbox st_check_term_conditions mt20">
-		<label>
-			<input class="i-check term_condition" name="term_condition"
-						 type="checkbox" <?php if ( STInput::post( 'term_condition' ) == 1 ) {
-				echo 'checked';
-			} ?>/><?php echo st_get_language( 'i_have_read_and_accept_the' ) . '<a target="_blank" href="' . get_the_permalink( st()->get_option( 'page_terms_conditions' ) ) . '"> ' . st_get_language( 'terms_and_conditions' ) . '</a>'; ?>
-		</label>
-	</div>
-	<?php
-	if ( STRecaptcha::inst()->_is_check_allow_captcha() ) {
+			[Choose type: Dive Centre, Dive Resort, Dive Academy, Liveaboard]
+			Organisation name
+			Business registration number
+			Tourism license number
+			Main contact full name
+			Email
+			Contact number
+			Mobile
+			Address
+			---Post code
+			---State
+			---Country
+			Website URL
+			*/
 		?>
-		<div class="form-group">
-			<label for="field-login_password"><?php echo esc_html__( 'Captcha', ST_TEXTDOMAIN ) ?></label>
-			<div class="content-captcha">
-				<?php echo do_shortcode( STRecaptcha::inst()->get_captcha() ); ?>
+
+		<div class="checkbox st_check_term_conditions mt20">
+			<label>
+				<input class="i-check term_condition" name="term_condition"
+							 type="checkbox" <?php if ( STInput::post( 'term_condition' ) == 1 ) {
+					echo 'checked';
+				} ?>/><?php echo st_get_language( 'i_have_read_and_accept_the' ) . '<a target="_blank" href="' . get_the_permalink( st()->get_option( 'page_terms_conditions' ) ) . '"> ' . st_get_language( 'terms_and_conditions' ) . '</a>'; ?>
+			</label>
+		</div>
+		<?php
+		if ( STRecaptcha::inst()->_is_check_allow_captcha() ) {
+			?>
+			<div class="form-group">
+				<label for="field-login_password"><?php echo esc_html__( 'Captcha', ST_TEXTDOMAIN ) ?></label>
+				<div class="content-captcha">
+					<?php echo do_shortcode( STRecaptcha::inst()->get_captcha() ); ?>
+				</div>
+			</div>
+		<?php } ?>
+		<div class="text-center mt20">
+			<input name="btn_reg" class="btn btn-primary btn-lg" type="hidden" value="register">
+			<button class="btn btn-primary btn-lg" type="submit"><?php echo esc_html( $btn_register ) ?></button>
+		</div>
+	</form>
+	<?php
+} else {
+	?>
+	<h2 class="text-center"><?php _e( 'Register as Diving Organisation', 'scuba' ) ?></h2>
+	<p class="text-center">
+		<?php _e( 'Want to register as an individual?', 'scuba' ) ?>
+		<a href="?individual"><?php _e( 'Click here', 'scuba' ) ?></a>
+	</p>
+	<form id="operator-registration-form" class="register_form" data-reset="<?php echo esc_attr( $reset ) ?>"
+				method="post" enctype="multipart/form-data"
+				action="<?php echo esc_url( add_query_arg( array( 'url' => STInput::request( 'url' ) ) ) ) ?>">
+		<input type="hidden" name="register_as" value="<?php echo $_REQUEST['register_as'] ?>">
+		<div class="row mt20 data_field">
+
+			<div class="col-md-12">
+				<div class="form-group ">
+					<label for="field-operator-type">Organisation Type</label>
+				</div>
+				<div class="scuba-btn-grp">
+
+					<input type="radio" required name="operator_type" id="operator-type-center" value="center">
+					<label for="operator-type-center">Dive Center</label>
+
+					<input type="radio" required name="operator_type" id="operator-type-resort" value="resort">
+					<label for="operator-type-resort">Dive Resort</label>
+
+					<input type="radio" required name="operator_type" id="operator-type-liveaboard" value="liveaboard">
+					<label for="operator-type-liveaboard">Liveaboard</label>
+
+					<input type="radio" required name="operator_type" id="operator-type-academy" value="academy">
+					<label for="operator-type-academy">Dive Academy</label>
+
+				</div>
 			</div>
 		</div>
-	<?php } ?>
-	<div class="text-center mt20">
-		<input name="btn_reg" class="btn btn-primary btn-lg" type="hidden" value="register">
-		<button class="btn btn-primary btn-lg" type="submit"><?php echo esc_html( $btn_register ) ?></button>
-	</div>
-</form>
+		<div class="row mt20 data_field">
+			<?php
+			$fields_renderer->render( [
+				'org_name'               => __( 'Organisation name', 'scuba' ),
+				'org_number'             => __( 'Business registration number', 'scuba' ),
+				'tourism_license_number' => __( 'Tourism license number', 'scuba' ),
+				'website'     => [
+					'label' => __( 'Website URL', 'scuba' ),
+					'type'  => 'url',
+				],
+				'full_name'              => __( 'Main contact full name', 'scuba' ),
+				'user_name'              => __( 'User Name', 'scuba' ),
+				'email'                  => __( 'Email', 'scuba' ),
+				'password'               => __( 'Password', 'scuba' ),
+				'contact'                => [
+					'label' => __( 'Phone number', 'scuba' ),
+					'type'  => 'tel',
+				],
+				'mobile'                => [
+					'label' => __( 'Mobile', 'scuba' ),
+					'type'  => 'tel',
+				],
 
+				'address'                => __( 'Address', 'scuba' ),
+				'state'                  => __( 'State', 'scuba' ),
+				'Postcode'               => __( 'Postcode', 'scuba' ),
+				'country'                => [
+					'label'   => __( 'Country', 'scuba' ),
+					'options' => $country_ops,
+					'type'    => 'select',
+					'required' => false,
+				],
+			] );
+			?>
+		</div>
+
+		<?php
+		/*
+			DIVE PROFESSIONALS
+
+
+			Full name
+			Nationality
+			Identity card / Passport number
+			Email
+			Contact number / mobile
+			Address
+			---State
+			---Postcode
+			---Country
+			Dive Agency (e.g. PADI, SSI, NAUI, etc)
+			Dive Pro Rating (e.g. Dive master, instructor)
+			Dive Pro Number
+			Upload photo of dive pro card
+
+
+			DIVE OPERATOR
+
+
+			[Choose type: Dive Centre, Dive Resort, Dive Academy, Liveaboard]
+			Organisation name
+			Business registration number
+			Tourism license number
+			Main contact full name
+			Email
+			Contact number
+			Mobile
+			Address
+			---Post code
+			---State
+			---Country
+			Website URL
+			*/
+		?>
+
+		<div class="checkbox st_check_term_conditions mt20">
+			<label>
+				<input class="i-check term_condition" name="term_condition"
+							 type="checkbox" <?php if ( STInput::post( 'term_condition' ) == 1 ) {
+					echo 'checked';
+				} ?>/><?php echo st_get_language( 'i_have_read_and_accept_the' ) . '<a target="_blank" href="' . get_the_permalink( st()->get_option( 'page_terms_conditions' ) ) . '"> ' . st_get_language( 'terms_and_conditions' ) . '</a>'; ?>
+			</label>
+		</div>
+		<?php
+		if ( STRecaptcha::inst()->_is_check_allow_captcha() ) {
+			?>
+			<div class="form-group">
+				<label for="field-login_password"><?php echo esc_html__( 'Captcha', ST_TEXTDOMAIN ) ?></label>
+				<div class="content-captcha">
+					<?php echo do_shortcode( STRecaptcha::inst()->get_captcha() ); ?>
+				</div>
+			</div>
+		<?php } ?>
+		<div class="text-center mt20">
+			<input name="btn_reg" class="btn btn-primary btn-lg" type="hidden" value="register">
+			<button class="btn btn-primary btn-lg" type="submit"><?php echo esc_html( $btn_register ) ?></button>
+		</div>
+	</form>
+
+	<?php
+}
+?>
 <script>
 	jQuery( function ( $ ) {
 		var
-			$country = $( '#field-country' ),
+			$country  = $( '#field-country' ),
 			$location = $( '#field-diving_location' );
 
 		$location.children( '[value]' ).hide();

@@ -25,10 +25,11 @@ if ( is_wp_error( STUser_f::validation() ) ) {
 		$class_user = new STUser_f();
 		$class_user->_update_info_user( $user_id );
 
-		require_once ABSPATH . 'wp-admin/includes/image.php';
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		require_once ABSPATH . 'wp-admin/includes/media.php';
-
+		if ( ! function_exists( 'media_handle_upload' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			require_once ABSPATH . 'wp-admin/includes/media.php';
+		}
 		$attachment_id = media_handle_upload( 'certification_card', 0 );
 
 		Scubahive::instance()->save_user_meta( $user_id );

@@ -26,6 +26,8 @@ class Scubahive {
 
 	public function __construct() {
 
+		include 'inc/shramee-form-fields.php';
+
 		include 'inc/template-tags.php';
 
 		include 'inc/filters.php';

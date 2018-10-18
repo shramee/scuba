@@ -20,11 +20,13 @@ if(st()->get_option('enable_popup_login','off') == 'on'){
 
 get_header();
 ?>
+<style>
+	h2 {
+		margin-top: 1.6em;
+	}
+</style>
 <div class="container-fluid">
 	<div class="row">
-		<div class="container">
-			<?php the_title( '<h1 class="page-title text-center mt60">', '</h1>') ?>
-		</div>
 		<div class="container">
 			<div class="row" data-gutter="60">
 				<div class="col-md-8 col-md-offset-2">
