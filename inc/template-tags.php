@@ -65,3 +65,7 @@ function scuba_shortcode_from_template(  $atts = [], $content, $shortcode ) {
 add_shortcode( 'location-loop', 'scuba_shortcode_from_template' );
 
 add_shortcode( 'location-dropdown', 'scuba_shortcode_from_template' );
+
+add_shortcode( 'scuba_hotel_reviews', 'scuba_shortcode_from_template' );
+
+add_shortcode( 'scuba_hotel_slider', 'scuba_shortcode_from_template' );
