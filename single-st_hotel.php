@@ -49,25 +49,26 @@ while ( have_posts() ): the_post();
 						<div class="hotel-header-meta">
 							<?php
 							$total = get_comments_number();
-							$avg   = STReview::get_avg_rate();
+							if ( $total ) {
+								$avg = STReview::get_avg_rate();
 
-							$stars = '';
-							for ( $x = 1; $x <= $avg; $x ++ ) {
-								$stars .= '<i class="fa fa-star"></i>';
-							}
-							if ( strpos( $avg, '.' ) ) {
-								$stars .= '<i class="fa fa-star-half"></i>';
-								$x ++;
-							}
-							while ( $x <= 5 ) {
-								$stars .= '<i class="fa fa-star-o"></i>';
-								$x ++;
-							}
+								$stars = '';
+								for ( $x = 1; $x <= $avg; $x ++ ) {
+									$stars .= '<i class="fa fa-star"></i>';
+								}
+								if ( strpos( $avg, '.' ) ) {
+									$stars .= '<i class="fa fa-star-half"></i>';
+									$x ++;
+								}
+								while ( $x <= 5 ) {
+									$stars .= '<i class="fa fa-star-o"></i>';
+									$x ++;
+								}
 
-							?>
-							<div class="scuba-hotel-review-score">
-								<span class='reviews-stars st-stars pull-right'><?php echo $stars ?></span>
-								<span class='review-score-text'>
+								?>
+								<div class="scuba-hotel-review-score">
+									<span class='reviews-stars st-stars pull-right'><?php echo $stars ?></span>
+									<span class='review-score-text'>
 									<?php printf(
 										__( 'Rated %1$s by %2$s' ),
 										'<span class="review-text">' .
@@ -79,7 +80,10 @@ while ( have_posts() ): the_post();
 									); ?>
 
 								</span>
-							</div>
+								</div>
+								<?php
+							}
+							?>
 						</div>
 
 						<p class="hotel-excerpt">
