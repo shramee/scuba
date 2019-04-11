@@ -15,6 +15,32 @@ Template:    traveler
 
   .scuba-order-999 {
     order: 999; } }
+.st-more-info {
+  margin-bottom: 40px; }
+  .st-more-info .left {
+    width: 90px;
+    float: left;
+    display: block;
+    color: #000;
+    font-weight: bold; }
+  .st-more-info .right {
+    padding-left: 120px;
+    display: block; }
+  .st-more-info.style-2 {
+    margin-bottom: 45px; }
+    .st-more-info.style-2 .icon {
+      float: left;
+      display: block;
+      font-size: 50px;
+      color: #ed8323;
+      line-height: 1; }
+    .st-more-info.style-2 .right {
+      padding-left: 100px; }
+      .st-more-info.style-2 .right .title {
+        font-size: 14px;
+        color: #000;
+        font-weight: bold; }
+
 .scuba-btn-grp {
   clear: both;
   display: flex;
@@ -59,6 +85,8 @@ Template:    traveler
   font-weight: normal; }
 .single-st_hotel #st-content-wrapper .sub-heading .fa {
   vertical-align: middle; }
+.single-st_hotel #st-content-wrapper .st-breadcrumb + .container {
+  margin-bottom: 2.5em; }
 .single-st_hotel span.review-text, .single-st_hotel span.review-count {
   color: #339; }
 .single-st_hotel .fotorama__stage__frame img.fotorama__img {

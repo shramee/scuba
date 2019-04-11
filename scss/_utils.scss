@@ -8,3 +8,36 @@
 		order: 999;
 	}
 }
+
+.st-more-info {
+	margin-bottom: 40px;
+	.left {
+		width: 90px;
+		float: left;
+		display: block;
+		color: #000;
+		font-weight: bold;
+	}
+	.right {
+		padding-left: 120px;
+		display: block;
+	}
+	&.style-2 {
+		margin-bottom: 45px;
+		.icon {
+			float: left;
+			display: block;
+			font-size: 50px;
+			color: #ed8323;
+			line-height: 1;
+		}
+		.right {
+			padding-left: 100px;
+			.title {
+				font-size: 14px;
+				color: #000;
+				font-weight: bold;
+			}
+		}
+	}
+}

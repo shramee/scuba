@@ -29,7 +29,7 @@ while ( have_posts() ): the_post();
 	$marker_icon = st()->get_option( 'st_hotel_icon_map_marker', '' );
 	?>
 	<div id="st-content-wrapper">
-		<?php st_breadcrumbs_new() ?>
+		<?php st_breadcrumbs() ?>
 		<div class="container">
 			<div class="row scuba-flex-center">
 
