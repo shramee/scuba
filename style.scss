@@ -9,8 +9,11 @@ Template:    traveler
 (optional values you can add: Theme URI, Author URI, Version)
 */
 
+@import "scss/utils";
+
 @import "scss/forms";
 
 @import "scss/locations-loop";
 
 @import "scss/hotels";
+

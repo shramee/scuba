@@ -8,6 +8,13 @@ Template:    traveler
 
 (optional values you can add: Theme URI, Author URI, Version)
 */
+@media (min-width: 992px) {
+  .scuba-flex-center {
+    display: flex;
+    align-items: center; }
+
+  .scuba-order-999 {
+    order: 999; } }
 .scuba-btn-grp {
   clear: both;
   display: flex;
@@ -48,7 +55,7 @@ Template:    traveler
 .single-st_hotel #st-content-wrapper .scuba-hotel-logo {
   margin: 1em auto; }
 .single-st_hotel #st-content-wrapper .sub-heading {
-  margin: 0;
+  margin: 1em 0 1.6em;
   font-weight: normal; }
 .single-st_hotel #st-content-wrapper .sub-heading .fa {
   vertical-align: middle; }

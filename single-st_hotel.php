@@ -31,13 +31,13 @@ while ( have_posts() ): the_post();
 	<div id="st-content-wrapper">
 		<?php st_breadcrumbs_new() ?>
 		<div class="container">
-			<div class="row">
+			<div class="row scuba-flex-center">
 
-				<div class="col-xs-12 col-md-6 pull-right">
+				<div class="col-xs-12 col-md-7 scuba-order-999">
 					<?php echo do_shortcode( '[scuba_hotel_slider]' ); ?>
 				</div>
 
-				<div class="col-xs-12 col-md-6">
+				<div class="col-xs-12 col-md-5">
 					<div class="st-hotel-header">
 						<h2 class="sub-heading">
 							<?php if ( $address ) {
@@ -45,6 +45,9 @@ while ( have_posts() ): the_post();
 								echo esc_html( $address );
 							} ?>
 						</h2>
+						<p>
+							<img align="<?php the_title() ?>" src="<?php echo $hotel_logo ?>">
+						</p>
 						<h1 class="st-heading"><?php the_title(); ?></h1>
 						<div class="hotel-header-meta">
 							<?php
@@ -90,9 +93,6 @@ while ( have_posts() ): the_post();
 							<?php the_excerpt(); ?>
 						</p>
 					</div>
-				</div>
-				<div class="col-xs-12 text-center scuba-hotel-logo">
-					<img align="<?php the_title() ?>" src="<?php echo $hotel_logo ?>">
 				</div>
 			</div>
 		</div>
