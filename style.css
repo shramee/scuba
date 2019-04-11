@@ -38,14 +38,26 @@ Template:    traveler
     flex: 1 1 30%;
     background: center/cover; }
 
-#st-content-wrapper .st-hotel-header {
+.single-st_hotel #st-content-wrapper .st-hotel-header {
   margin-top: 1em;
   flex-direction: column; }
-
-.scuba-hotel-image {
+.single-st_hotel #st-content-wrapper .scuba-hotel-image {
   max-width: 100%; }
-
-.scuba-hotel-logo {
+.single-st_hotel #st-content-wrapper .st-hotel-header {
+  align-items: stretch; }
+.single-st_hotel #st-content-wrapper .scuba-hotel-logo {
   margin: 1em auto; }
+.single-st_hotel #st-content-wrapper .sub-heading {
+  margin: 0;
+  font-weight: normal; }
+.single-st_hotel #st-content-wrapper .sub-heading .fa {
+  vertical-align: middle; }
+.single-st_hotel span.review-text, .single-st_hotel span.review-count {
+  color: #339; }
+.single-st_hotel .fotorama__stage__frame img.fotorama__img {
+  max-width: 1024px !important;
+  margin: auto;
+  left: 0 !important;
+  height: auto !important; }
 
 /*# sourceMappingURL=style.css.map */

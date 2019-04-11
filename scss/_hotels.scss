@@ -1,12 +1,37 @@
-#st-content-wrapper .st-hotel-header {
-	margin-top: 1em;
-	flex-direction: column;
-}
+.single-st_hotel {
+	#st-content-wrapper {
+		.st-hotel-header {
+			margin-top: 1em;
+			flex-direction: column;
+		}
 
-.scuba-hotel-image {
-	max-width: 100%;
-}
+		.scuba-hotel-image {
+			max-width: 100%;
+		}
 
-.scuba-hotel-logo {
-	margin: 1em auto;
+		.st-hotel-header {
+			align-items: stretch;
+		}
+
+		.scuba-hotel-logo {
+			margin: 1em auto;
+		}
+		.sub-heading {
+			margin: 0;
+			font-weight: normal;
+		}
+		.sub-heading .fa {
+			vertical-align: middle;
+		}
+	}
+	span.review-text, span.review-count {
+		color: #339;
+	}
+
+	.fotorama__stage__frame img.fotorama__img {
+		max-width: 1024px !important;
+		margin: auto;
+		left: 0 !important;
+		height: auto !important;
+	}
 }

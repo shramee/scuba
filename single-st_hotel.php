@@ -26,33 +26,68 @@ while ( have_posts() ): the_post();
 	$zoom         = get_post_meta( $post_id, 'map_zoom', true );
 	$hotel_logo   = get_post_meta( $post_id, 'logo', true );
 
-	$marker_icon   = st()->get_option( 'st_hotel_icon_map_marker', '' );
+	$marker_icon = st()->get_option( 'st_hotel_icon_map_marker', '' );
 	?>
 	<div id="st-content-wrapper">
 		<?php st_breadcrumbs_new() ?>
 		<div class="container">
 			<div class="row">
 
-				<div class="col-sm-12 col-md-6 pull-right">
+				<div class="col-xs-12 col-md-6 pull-right">
 					<?php echo do_shortcode( '[scuba_hotel_slider]' ); ?>
 				</div>
 
-				<div class="col-sm-12 col-md-6">
+				<div class="col-xs-12 col-md-6">
 					<div class="st-hotel-header">
-						<?php echo st()->load_template( 'layouts/modern/common/star', '', [ 'star' => $hotel_star ] ); ?>
-						<h1 class="st-heading"><?php the_title(); ?></h1>
-						<div class="sub-heading">
+						<h2 class="sub-heading">
 							<?php if ( $address ) {
 								echo TravelHelper::getNewIcon( 'Ico_maps', '#5E6D77', '16px', '16px' );
 								echo esc_html( $address );
 							} ?>
+						</h2>
+						<h1 class="st-heading"><?php the_title(); ?></h1>
+						<div class="hotel-header-meta">
+							<?php
+							$total = get_comments_number();
+							$avg   = STReview::get_avg_rate();
+
+							$stars = '';
+							for ( $x = 1; $x <= $avg; $x ++ ) {
+								$stars .= '<i class="fa fa-star"></i>';
+							}
+							if ( strpos( $avg, '.' ) ) {
+								$stars .= '<i class="fa fa-star-half"></i>';
+								$x ++;
+							}
+							while ( $x <= 5 ) {
+								$stars .= '<i class="fa fa-star-o"></i>';
+								$x ++;
+							}
+
+							?>
+							<div class="scuba-hotel-review-score">
+								<span class='reviews-stars st-stars pull-right'><?php echo $stars ?></span>
+								<span class='review-score-text'>
+									<?php printf(
+										__( 'Rated %1$s by %2$s' ),
+										'<span class="review-text">' .
+										TravelHelper::get_rate_review_text( $avg ) .
+										'</span>',
+										'<span class="review-count">' .
+										get_comments_number_text( __( '0 reviews' ), __( '1 review' ), __( '% reviews' ) ) .
+										'</span>'
+									); ?>
+
+								</span>
+							</div>
 						</div>
+
 						<p class="hotel-excerpt">
 							<?php the_excerpt(); ?>
 						</p>
 					</div>
 				</div>
-				<div class="col-sm-12 text-center scuba-hotel-logo">
+				<div class="col-xs-12 text-center scuba-hotel-logo">
 					<img align="<?php the_title() ?>" src="<?php echo $hotel_logo ?>">
 				</div>
 			</div>
