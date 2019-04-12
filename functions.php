@@ -10,6 +10,8 @@ include 'inc/shramee-form-fields.php';
 
 include 'inc/template-tags.php';
 
+include 'inc/traveler_mods.php';
+
 include 'inc/filters.php';
 
 include 'inc/main.php';
