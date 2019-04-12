@@ -15,6 +15,13 @@ Template:    traveler
 
   .scuba-order-999 {
     order: 999; } }
+.vc_row.scuba-center-content, .vc_row.scuba-center-content .vc_row {
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  align-items: center; }
+
 .st-more-info {
   margin-bottom: 40px; }
   .st-more-info .left {

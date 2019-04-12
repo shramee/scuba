@@ -9,6 +9,15 @@
 	}
 }
 
+.vc_row.scuba-center-content {
+	&, .vc_row {
+		display: flex;
+		-webkit-flex-wrap: wrap;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+}
 .st-more-info {
 	margin-bottom: 40px;
 	.left {
