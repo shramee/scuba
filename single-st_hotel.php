@@ -60,7 +60,7 @@ while ( have_posts() ): the_post();
 									$stars .= '<i class="fa fa-star"></i>';
 								}
 								if ( strpos( $avg, '.' ) ) {
-									$stars .= '<i class="fa fa-star-half"></i>';
+									$stars .= '<i class="fa fa-star-half-full"></i>';
 									$x ++;
 								}
 								while ( $x <= 5 ) {
@@ -73,7 +73,7 @@ while ( have_posts() ): the_post();
 									<span class='reviews-stars st-stars pull-right'><?php echo $stars ?></span>
 									<span class='review-score-text'>
 									<?php printf(
-										__( 'Rated %1$s by %2$s' ),
+										__( 'Rated %1$s (%2$s)' ),
 										'<span class="review-text">' .
 										TravelHelper::get_rate_review_text( $avg ) .
 										'</span>',
