@@ -14,17 +14,13 @@ if ( ! function_exists( 'st_location_list_hotel_func' ) ) {
 		$st_search_args = $data;
 		$hotel          = STHotel::inst();
 
+		add_action( 'posts_where', [ $hotel, '_get_where_query' ] );
 		add_action( 'pre_get_posts', [ $hotel, 'change_search_hotel_arg' ] );
-//		add_action( 'posts_fields', [ $hotel, '_change_posts_fields' ] );
-		add_filter( 'posts_where', function ( $where ) use ( $hotel ) {
-			return str_replace(
-				' AND check_in >= UNIX_TIMESTAMP(CURRENT_DATE)', '',
-				$hotel->_get_where_query( $where )
-			);
-		} );
-//		add_filter( 'posts_join', [ $hotel, '_get_join_query' ] );
 		add_filter( 'posts_orderby', [ $hotel, '_get_order_by_query' ] );
 		add_filter( 'posts_groupby', [ $hotel, '_change_posts_groupby' ] );
+		add_filter( 'posts_where', function ( $where ) {
+			return str_replace( ' AND check_in >= UNIX_TIMESTAMP(CURRENT_DATE)', '', $where );
+		} );
 
 		$return           = '';
 		$query            = array(
@@ -38,12 +34,12 @@ if ( ! function_exists( 'st_location_list_hotel_func' ) ) {
 		$data['query']    = $query;
 		$data['style']    = $st_location_style;
 		$data['taxonomy'] = false;
-		query_posts( $query );
-		if ( have_posts() ) :
+		$qry = new WP_Query( $query );
+		if ( $qry->have_posts() ) :
 			if ( $st_location_style == 'grid' ) {
 				$return .= '<div class="row row-wrap loop_hotel loop_grid_hotel style_box">';
 			}
-			while ( have_posts() ) : the_post();
+			while ( $qry->have_posts() ) : $qry->the_post();
 				switch ( $st_location_style ) {
 					case "grid":
 						$return .= st()->load_template( 'hotel/loop', 'grid', $data );
@@ -65,4 +61,3 @@ if ( ! function_exists( 'st_location_list_hotel_func' ) ) {
 
 	st_reg_shortcode( 'st_location_list_hotel', 'st_location_list_hotel_func' );
 };
-

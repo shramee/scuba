@@ -90,7 +90,7 @@ $hotel_logo   = get_post_meta( $post_id, 'logo', true );
 					$price = get_post_meta( $post_id, 'price_avg', 'singel' );
 					if ( $price ) {
 						?>
-						<span class="booking-item-price text-primary">
+						<span class="scuba-booking-item-price text-primary">
 							<?php printf( __( "Packages from %s", ST_TEXTDOMAIN ), TravelHelper::format_money( $price ) ) ?>
 						</span>
 						<?php
