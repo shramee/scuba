@@ -5,7 +5,7 @@
  * Date: 11/04/19
  * Time: 1:48 PM
  */
-$post_id      = get_the_ID();
+$post_id = get_the_ID();
 ?>
 <div id="reviews" data-toggle-section="st-reviews">
 	<div class="row">
@@ -92,7 +92,7 @@ $post_id      = get_the_ID();
 			<div class="review-box has-matchHeight">
 				<h2 class="heading"><?php echo __( 'Summary', ST_TEXTDOMAIN ) ?></h2>
 				<?php
-				$stats = STReview::get_review_summary();
+				$stats = STReview::get_review_summary( $post_id );
 				if ( $stats ) {
 					foreach ( $stats as $stat ) {
 						?>
