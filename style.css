@@ -48,6 +48,13 @@ Template:    traveler
         color: #000;
         font-weight: bold; }
 
+@media (min-width: 992px) {
+  body .text-left-md {
+    text-align: left; }
+  body .text-center-md {
+    text-align: center; }
+  body .text-right-md {
+    text-align: right; } }
 .scuba-btn-grp {
   clear: both;
   display: flex;
@@ -101,5 +108,9 @@ Template:    traveler
   margin: auto;
   left: 0 !important;
   height: auto !important; }
+
+.booking-item .scuba-dc-list-img,
+.booking-item .hotel-header-meta {
+  margin-bottom: .7em; }
 
 /*# sourceMappingURL=style.css.map */

@@ -2,6 +2,7 @@
 //wp_enqueue_script('magnific.js' );
 global $post;
 
+$post_id      = get_the_ID();
 $link      = st_get_link_with_search( get_permalink(), array(
 	'start',
 	'end',
@@ -9,8 +10,8 @@ $link      = st_get_link_with_search( get_permalink(), array(
 	'adult_number',
 	'children_num'
 ), $_GET );
-$hotel     = new STHotel( get_the_ID() );
-$thumb_url = wp_get_attachment_url( get_post_thumbnail_id( get_the_ID() ) );
+$hotel     = new STHotel( $post_id );
+$thumb_url = wp_get_attachment_url( get_post_thumbnail_id( $post_id ) );
 $check_in  = '';
 $check_out = '';
 if ( ! isset( $_REQUEST['start'] ) || empty( $_REQUEST['start'] ) ) {
@@ -25,72 +26,29 @@ if ( ! isset( $_REQUEST['end'] ) || empty( $_REQUEST['end'] ) ) {
 	$check_out = TravelHelper::convertDateFormat( STInput::request( 'end' ) );
 }
 $numberday = STDate::dateDiff( $check_in, $check_out );
+$hotel_logo   = get_post_meta( $post_id, 'logo', true );
 ?>
 <li <?php post_class( 'booking-item' ) ?>>
 	<?php echo STFeatured::get_featured(); ?>
 	<div class="row">
-		<div class="col-md-3">
-			<div class="booking-item-img-wrap st-popup-gallery">
-				<a href="<?php echo esc_url( $thumb_url ) ?>" class="st-gp-item">
-					<?php if ( has_post_thumbnail() and get_the_post_thumbnail() ) {
-						the_post_thumbnail( array(
-							360,
-							270
-						), array( 'alt' => TravelHelper::get_alt_image( get_post_thumbnail_id( get_the_ID() ) ) ) );
-					} else {
-						echo st_get_default_image();
-					} ?>
-				</a>
-				<?php
-				$count   = 0;
-				$gallery = get_post_meta( get_the_ID(), 'gallery', true );
-
-				$gallery = explode( ',', $gallery );
-
-
-				if ( ! empty( $gallery ) and $gallery[0] ) {
-					$count += count( $gallery );
-				}
-
-				if ( has_post_thumbnail() ) {
-					$count ++;
-				}
-
-
-				if ( $count ) {
-					echo '<div class="booking-item-img-num"><i class="fa fa-picture-o"></i>';
-					echo esc_attr( $count );
-					echo '</div>';
-				}
-				?>
-				<div class="hidden">
-					<?php if ( ! empty( $gallery ) and $gallery[0] ) {
-						$count += count( $gallery );
-						foreach ( $gallery as $key => $value ) {
-							$img_link = wp_get_attachment_image_src( $value, array( 800, 600, 'bfi_thumb' => true ) );
-							if ( isset( $img_link[0] ) ) {
-								echo "<a class='st-gp-item' href='{$img_link[0]}'></a>";
-							}
-						}
-
-					} ?>
-				</div>
-				<?php
-				echo st_get_avatar_in_list_service( get_the_ID(), 35 );
-				?>
-
-			</div>
+		<div class="scuba-dc-list-img col-md-3">
+			<a href="<?php echo get_permalink() ?>">
+				<img alt="<?php the_title() ?>" title="<?php the_title() ?> logo" src="<?php echo $hotel_logo ?>">
+			</a>
 		</div>
-		<div class="col-md-9">
-			<?php if ( $address = get_post_meta( get_the_ID(), 'address', true ) ): ?>
+		<div class="scuba-dc-list-content col-md-9">
+			<?php if ( $address = get_post_meta( $post_id, 'address', true ) ): ?>
 				<p class="booking-item-address"><i
 						class="fa fa-map-marker"></i> <?php echo esc_html( $address ) ?>
 				</p>
 			<?php endif; ?>
-			<?php the_title( '<h3 class="booking-item-title">', '</h3>' ) ?>
+
+			<a href="<?php echo get_permalink() ?>">
+				<?php the_title( '<h3 class="booking-item-title">', '</h3>' ) ?>
+			</a>
 
 			<div class="hotel-header-meta row">
-				<div class="col-sm-6 scuba-hotel-review-score">
+				<div class="col-md-6 scuba-hotel-review-score">
 					<?php
 					$total = get_comments_number();
 					if ( $total ) {
@@ -121,21 +79,20 @@ $numberday = STDate::dateDiff( $check_in, $check_out );
 										get_comments_number_text( __( '0 reviews' ), __( '1 review' ), __( '% reviews' ) ) .
 										'</span>'
 									); ?>
-
 								</span>
 						<?php
 					}
 					?>
 				</div>
 
-				<div class="col-sm-6 text-right">
+				<div class="col-md-6 text-right-md">
 					<?php
-					$price = get_post_meta( get_the_ID(), 'price_avg', 'singel' );
+					$price = get_post_meta( $post_id, 'price_avg', 'singel' );
 					if ( $price ) {
 						?>
-						<span class="booking-item-price-from">
-								<?php echo __( "Packages starting", ST_TEXTDOMAIN ) . ' ' . TravelHelper::format_money( $price ) ?>
-							</span>
+						<span class="booking-item-price text-primary">
+							<?php printf( __( "Packages from %s", ST_TEXTDOMAIN ), TravelHelper::format_money( $price ) ) ?>
+						</span>
 						<?php
 					}
 					?>
@@ -154,9 +111,9 @@ $numberday = STDate::dateDiff( $check_in, $check_out );
 
 			<br>
 
-			<div class="btn-group-justified">
+			<div class="btn-group btn-group-justified">
 				<a href="<?php echo get_permalink() ?>" class="btn btn-primary">View details</a>
-				<a href="<?php echo get_permalink() . '#enquire-now' ?>" class="btn">Enquire</a>
+				<a href="<?php echo get_permalink() . '#enquire-now' ?>" class="btn btn-primary-invert">Enquire</a>
 			</div>
 		</div>
 	</div>

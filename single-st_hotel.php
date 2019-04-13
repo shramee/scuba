@@ -46,7 +46,7 @@ while ( have_posts() ): the_post();
 							} ?>
 						</h2>
 						<p>
-							<img align="<?php the_title() ?>" src="<?php echo $hotel_logo ?>">
+							<img alt="<?php the_title() ?>" title="<?php the_title() ?> logo" src="<?php echo $hotel_logo ?>">
 						</p>
 						<h1 class="st-heading"><?php the_title(); ?></h1>
 						<div class="hotel-header-meta">

@@ -50,3 +50,18 @@
 		}
 	}
 }
+
+
+@media (min-width: 992px) {
+	body {
+		.text-left-md {
+			text-align: left;
+		}
+		.text-center-md {
+			text-align: center;
+		}
+		.text-right-md {
+			text-align: right;
+		}
+	}
+}
