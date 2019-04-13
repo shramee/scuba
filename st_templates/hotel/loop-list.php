@@ -33,7 +33,7 @@ $hotel_logo   = get_post_meta( $post_id, 'logo', true );
 	<div class="row">
 		<div class="scuba-dc-list-img col-md-3">
 			<a href="<?php echo get_permalink() ?>">
-				<img alt="<?php the_title() ?>" title="<?php the_title() ?> logo" src="<?php echo $hotel_logo ?>">
+				<?php the_post_thumbnail( 'medium' ); ?>
 			</a>
 		</div>
 		<div class="scuba-dc-list-content col-md-9">
