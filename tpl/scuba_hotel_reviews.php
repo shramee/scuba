@@ -124,7 +124,7 @@ $post_id = get_the_ID();
 			$from             = $comment_per_page * ( $paged - 1 ) + 1;
 			$to               = ( $paged * $comment_per_page < $total ) ? ( $paged * $comment_per_page ) : $total;
 			?>
-			<?php comments_number( __( 'Be the first one to review this Dive center', ST_TEXTDOMAIN ), __( '1 review on this Dive center', ST_TEXTDOMAIN ), __( '% reviews on this Dive center', ST_TEXTDOMAIN ) ); ?>
+			<?php comments_number( __( 'Be the first one to review this dive center', ST_TEXTDOMAIN ), __( '1 review on this dive center', ST_TEXTDOMAIN ), __( '% reviews on this dive center', ST_TEXTDOMAIN ) ); ?>
 			- <?php echo sprintf( __( 'Showing %s to %s', ST_TEXTDOMAIN ), $from, $to ) ?>
 		</div>
 		<div id="reviews" class="review-list">
@@ -150,18 +150,37 @@ $post_id = get_the_ID();
 	<?php TravelHelper::pagination_comment( [ 'total' => $total ] ) ?>
 	<?php
 	if ( comments_open( $post_id ) ) {
-		?>
-		<div id="write-review">
-			<h4 class="heading">
-				<a href="" class="toggle-section c-main f16"
-					 data-target="st-review-form"><?php echo __( 'Write a review', ST_TEXTDOMAIN ) ?>
-					<i class="fa fa-angle-down ml5"></i></a>
+		$code = 'phil' . ( date( 'm' ) * 10 + date( 'd' ) );
+		if ( is_user_logged_in() || $_POST['scuba-review'] == $code ) {
+			?>
+			<div id="write-review">
+				<h4 class="heading">
+					<a href="" class="toggle-section c-main f16"
+						 data-target="st-review-form"><?php echo __( 'Write a review', ST_TEXTDOMAIN ) ?>
+						<i class="fa fa-angle-down ml5"></i></a>
+				</h4>
+				<?php TravelHelper::comment_form(); ?>
+			</div>
+			<?php
+		} else if ( isset( $_GET['scuba-review'] ) ) {
+			?>
+
+			<form method="post">
+				<input type="hidden" name="scuba-review" value="<?php echo $code ?>">
+				<h4 class="sub-heading">
+					<input type="submit" value="<?php echo __( 'Loginto leave a review', ST_TEXTDOMAIN ) ?>" class="btn btn-block btn-primary">
+				</h4>
+			</form>
+
+			<?php
+		} else {
+			?>
+			<h4 class="sub-heading">
+				<a href="#st-login-form" class="btn btn-block btn-primary" data-toggle="modal" data-target="#st-login-form">
+					<?php echo __( 'Login to leave a review', ST_TEXTDOMAIN ) ?></a>
 			</h4>
 			<?php
-			TravelHelper::comment_form();
-			?>
-		</div>
-		<?php
+		}
 	}
 	?>
 </div>

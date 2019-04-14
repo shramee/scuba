@@ -14,20 +14,27 @@
 		?>
 	</p>
 	<div class="row">
-		<div class="col-xs-12 col-sm-6">
-			<div class="form-group">
-				<input type="text" class="form-control"
-							 name="author"
-							 placeholder="Name *">
+
+		<?php
+		if ( ! is_user_logged_in() ) {
+			?>
+			<div class="col-xs-12 col-sm-6">
+				<div class="form-group">
+					<input type="text" class="form-control"
+								 name="author"
+								 placeholder="Name *">
+				</div>
 			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6">
-			<div class="form-group">
-				<input type="email" class="form-control"
-							 name="email"
-							 placeholder="Email *">
+			<div class="col-xs-12 col-sm-6">
+				<div class="form-group">
+					<input type="email" class="form-control"
+								 name="email"
+								 placeholder="Email *">
+				</div>
 			</div>
-		</div>
+			<?php
+		}
+		?>
 		<div class="col-xs-12">
 			<div class="form-group">
 				<input type="text" class="form-control"
