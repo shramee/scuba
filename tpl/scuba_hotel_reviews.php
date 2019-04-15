@@ -124,7 +124,7 @@ $post_id = get_the_ID();
 			$from             = $comment_per_page * ( $paged - 1 ) + 1;
 			$to               = ( $paged * $comment_per_page < $total ) ? ( $paged * $comment_per_page ) : $total;
 			?>
-			<?php comments_number( __( 'Be the first one to review this dive center', ST_TEXTDOMAIN ), __( '1 review on this dive center', ST_TEXTDOMAIN ), __( '% reviews on this dive center', ST_TEXTDOMAIN ) ); ?>
+			<?php comments_number( __( 'Be the first to review this dive center', ST_TEXTDOMAIN ), __( '1 review on this dive center', ST_TEXTDOMAIN ), __( '% reviews on this dive center', ST_TEXTDOMAIN ) ); ?>
 			- <?php echo sprintf( __( 'Showing %s to %s', ST_TEXTDOMAIN ), $from, $to ) ?>
 		</div>
 		<div id="reviews" class="review-list">

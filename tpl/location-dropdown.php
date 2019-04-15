@@ -19,6 +19,7 @@ $the_query = new WP_Query( $args ); ?>
 	<label>
 		<span class="screen-reader-text">Choose location</span>
 	<select class="locations-dropdown" onchange="window.location.href = this.value">
+		<option value=""><?php _e( 'Take me to...' ) ?></option>
 		<?php while ( $the_query->have_posts() ) {
 			$the_query->the_post(); ?>
 			<option value="<?php the_permalink() ?>"><?php the_title() ?></option>
