@@ -12,36 +12,36 @@
 get_header();
 
 while ( have_posts() ): the_post();
-	$post_id     = get_the_ID();
-	$address     = get_post_meta( $post_id, 'address', true );
-	$review_rate = STReview::get_avg_rate();
-	$count_review = STReview::count_review($post_id);
-	$lat         = get_post_meta( $post_id, 'map_lat', true );
-	$lng         = get_post_meta( $post_id, 'map_lng', true );
-	$zoom        = get_post_meta( $post_id, 'map_zoom', true );
+	$post_id      = get_the_ID();
+	$address      = get_post_meta( $post_id, 'address', true );
+	$review_rate  = STReview::get_avg_rate();
+	$count_review = STReview::count_review( $post_id );
+	$lat          = get_post_meta( $post_id, 'map_lat', true );
+	$lng          = get_post_meta( $post_id, 'map_lng', true );
+	$zoom         = get_post_meta( $post_id, 'map_zoom', true );
 
 	$gallery       = get_post_meta( $post_id, 'gallery', true );
 	$gallery_array = explode( ',', $gallery );
 	$marker_icon   = st()->get_option( 'st_tours_icon_map_marker', '' );
 
-	$tour_external = get_post_meta(get_the_ID(), 'st_tour_external_booking', true);
-	$tour_external_link = get_post_meta(get_the_ID(), 'st_tour_external_booking_link', true);
+	$tour_external      = get_post_meta( get_the_ID(), 'st_tour_external_booking', true );
+	$tour_external_link = get_post_meta( get_the_ID(), 'st_tour_external_booking_link', true );
 	?>
 	<div id="st-content-wrapper" class="st-single-tour style-2">
 		<?php st_breadcrumbs_new() ?>
 		<div class="hotel-target-book-mobile">
 			<div class="price-wrapper">
-				<?php echo wp_kses( sprintf( __( 'from <span class="price">%s</span>', ST_TEXTDOMAIN ),STTour::get_price_html( get_the_ID() )), [ 'span' => [ 'class' => [] ] ] ) ?>
+				<?php echo wp_kses( sprintf( __( 'from <span class="price">%s</span>', ST_TEXTDOMAIN ), STTour::get_price_html( get_the_ID() ) ), [ 'span' => [ 'class' => [] ] ] ) ?>
 			</div>
 			<?php
-			if($tour_external == 'off' || empty($tour_external)){
+			if ( $tour_external == 'off' || empty( $tour_external ) ) {
 				?>
 				<a href=""
 					 class="btn btn-mpopup btn-green"><?php echo esc_html__( 'Book Now', ST_TEXTDOMAIN ) ?></a>
 				<?php
-			}else{
+			} else {
 				?>
-				<a href="<?php echo esc_url($tour_external_link); ?>"
+				<a href="<?php echo esc_url( $tour_external_link ); ?>"
 					 class="btn btn-green"><?php echo esc_html__( 'Book Now', ST_TEXTDOMAIN ) ?></a>
 				<?php
 			}
@@ -63,96 +63,102 @@ while ( have_posts() ): the_post();
 								</div>
 							</div>
 							<div class="right">
-								<div class="review-score style-2">
-									<span class="head-rating"><?php echo TravelHelper::get_rate_review_text( $review_rate, $count_review ); ?></span>
-									<?php echo st()->load_template( 'layouts/modern/common/star', '', [ 'star' => $review_rate, 'style' => 'style-2' ] ); ?>
-									<p class="st-link"><?php comments_number( __( 'from 0 review', ST_TEXTDOMAIN ), __( 'from 1 review', ST_TEXTDOMAIN ), __( 'from % reviews', ST_TEXTDOMAIN ) ); ?></p>
-								</div>
+								<?php
+								if ( $count_review ) {
+									?>
+									<div class="review-score style-2">
+										<span
+											class="head-rating"><?php echo TravelHelper::get_rate_review_text( $review_rate, $count_review ); ?></span>
+										<?php echo st()->load_template( 'layouts/modern/common/star', '', [ 'star'  => $review_rate,
+																																												'style' => 'style-2'
+										] ); ?>
+										<p
+											class="st-link"><?php comments_number( __( 'from 0 review', ST_TEXTDOMAIN ), __( 'from 1 review', ST_TEXTDOMAIN ), __( 'from % reviews', ST_TEXTDOMAIN ) ); ?></p>
+									</div>
+									<?php
+								}
+								?>
 							</div>
 						</div>
 
 						<!--Tour Info-->
 						<div class="st-tour-feature">
 							<div class="row">
-								<div class="col-xs-6 col-md-4">
+								<div class="col-xs-6 col-md-3">
 									<div class="item">
 										<div class="icon">
 											<?php echo TravelHelper::getNewIcon( 'ico_clock', '#5E6D77', '32px', '32px' ); ?>
 										</div>
 										<div class="info">
-											<h4 class="name"><?php echo __('Duration', ST_TEXTDOMAIN); ?></h4>
+											<h4 class="name"><?php echo __( 'Duration', ST_TEXTDOMAIN ); ?></h4>
 											<p class="value">
 												<?php
 												$duration = get_post_meta( get_the_ID(), 'duration_day', true );
-												echo esc_html($duration);
+												echo esc_html( $duration );
 												?>
 											</p>
 										</div>
 									</div>
 								</div>
-								<?php /*
-								<div class="col-xs-6 col-md-4">
+								<div class="col-xs-6 col-md-3">
 									<div class="item">
 										<div class="icon">
 											<?php echo TravelHelper::getNewIcon( 'ico_tour_type', '#5E6D77', '32px', '32px'); ?>
 										</div>
 										<div class="info">
-											<h4 class="name"><?php echo __('Tour Type', ST_TEXTDOMAIN); ?></h4>
+											<h4 class="name"><?php echo __('Type', ST_TEXTDOMAIN); ?></h4>
 											<p class="value">
 												<?php
-												$tour_type = get_post_meta(get_the_ID(), 'type_tour', true);
-												if($tour_type == 'daily_tour'){
-													echo __('Daily Tour', ST_TEXTDOMAIN);
-												}else{
-													echo __('Specific Tour', ST_TEXTDOMAIN);
+												$tour_type = wp_get_post_terms( get_the_ID(), 'st_tour_type' );
+												$tour_type = wp_list_pluck( $tour_type, 'name' );
+												echo implode( ', ', $tour_type );
+												?>
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-6 col-md-3">
+									<div class="item">
+										<div class="icon">
+											<?php echo TravelHelper::getNewIcon( 'ico_adults_blue', '#5E6D77', '32px', '32px' ); ?>
+										</div>
+										<div class="info">
+											<h4 class="name"><?php echo __( 'Group Size', ST_TEXTDOMAIN ); ?></h4>
+											<p class="value">
+												<?php
+												$max_people = get_post_meta( get_the_ID(), 'max_people', true );
+												if ( empty( $max_people ) or $max_people == 0 or $max_people < 0 ) {
+													echo __( 'Unlimited', ST_TEXTDOMAIN );
+												} else {
+													if ( $max_people == 1 ) {
+														echo sprintf( __( '%s person', ST_TEXTDOMAIN ), $max_people );
+													} else {
+														echo sprintf( __( '%s people', ST_TEXTDOMAIN ), $max_people );
+													}
 												}
 												?>
 											</p>
 										</div>
 									</div>
 								</div>
- 								*/ ?>
-								<div class="col-xs-6 col-md-4">
+								<div class="col-xs-6 col-md-3">
 									<div class="item">
 										<div class="icon">
-											<?php echo TravelHelper::getNewIcon( 'ico_adults_blue', '#5E6D77', '32px', '32px'); ?>
+											<?php echo TravelHelper::getNewIcon( 'Group', '#5E6D77', '32px', '32px' ); ?>
 										</div>
 										<div class="info">
-											<h4 class="name"><?php echo __('Group Size', ST_TEXTDOMAIN); ?></h4>
+											<h4 class="name"><?php echo __( 'Languages', ST_TEXTDOMAIN ); ?></h4>
 											<p class="value">
 												<?php
-												$max_people = get_post_meta(get_the_ID(), 'max_people', true);
-												if(empty($max_people) or $max_people == 0 or $max_people < 0){
-													echo __('Unlimited', ST_TEXTDOMAIN);
-												}else{
-													if($max_people == 1)
-														echo sprintf(__('%s person', ST_TEXTDOMAIN), $max_people);
-													else
-														echo sprintf(__('%s people', ST_TEXTDOMAIN), $max_people);
-												}
-												?>
-											</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-xs-6 col-md-4">
-									<div class="item">
-										<div class="icon">
-											<?php echo TravelHelper::getNewIcon( 'Group', '#5E6D77', '32px', '32px'); ?>
-										</div>
-										<div class="info">
-											<h4 class="name"><?php echo __('Languages', ST_TEXTDOMAIN); ?></h4>
-											<p class="value">
-												<?php
-												$term_list = wp_get_post_terms(get_the_ID(), 'languages');
+												$term_list    = wp_get_post_terms( get_the_ID(), 'languages' );
 												$str_term_arr = [];
-												if(!is_wp_error($term_list) && !empty($term_list)){
-													foreach ($term_list as $k => $v){
-														array_push($str_term_arr, $v->name);
+												if ( ! is_wp_error( $term_list ) && ! empty( $term_list ) ) {
+													foreach ( $term_list as $k => $v ) {
+														array_push( $str_term_arr, $v->name );
 													}
 
-													echo implode(', ', $str_term_arr);
-												}else{
+													echo implode( ', ', $str_term_arr );
+												} else {
 													echo '___';
 												}
 												?>
@@ -164,7 +170,7 @@ while ( have_posts() ): the_post();
 						</div>
 						<!--End Tour info-->
 						<?php
-						if ( !empty( $gallery_array ) ) { ?>
+						if ( ! empty( $gallery_array ) ) { ?>
 							<div class="st-gallery" data-width="100%"
 									 data-nav="thumbs" data-allowfullscreen="true">
 								<div class="fotorama" data-auto="false">
@@ -177,11 +183,11 @@ while ( have_posts() ): the_post();
 									?>
 								</div>
 								<div class="shares dropdown">
-									<?php $video_url = get_post_meta(get_the_ID(), 'video', true);
-									if (!empty($video_url)) {
+									<?php $video_url = get_post_meta( get_the_ID(), 'video', true );
+									if ( ! empty( $video_url ) ) {
 										?>
-										<a href="<?php echo esc_url($video_url); ?>"
-											 class="st-video-popup share-item"><?php echo TravelHelper::getNewIcon('video-player', '#FFFFFF', '20px', '20px') ?></a>
+										<a href="<?php echo esc_url( $video_url ); ?>"
+											 class="st-video-popup share-item"><?php echo TravelHelper::getNewIcon( 'video-player', '#FFFFFF', '20px', '20px' ) ?></a>
 									<?php } ?>
 									<a href="#" class="share-item social-share">
 										<?php echo TravelHelper::getNewIcon( 'ico_share', '', '20px', '20px' ) ?>
@@ -219,10 +225,10 @@ while ( have_posts() ): the_post();
 						global $post;
 						$content = $post->post_content;
 						$count   = str_word_count( $content );
-						if(!empty($content)){
+						if ( ! empty( $content ) ) {
 							?>
 							<div class="st-overview">
-								<h3 class="st-section-title"><?php echo __('Overview', ST_TEXTDOMAIN); ?></h3>
+								<h3 class="st-section-title"><?php echo __( 'Overview', ST_TEXTDOMAIN ); ?></h3>
 								<div class="st-description" data-toggle-section="st-description" <?php if ( $count >= 120 ) {
 									echo 'data-show-all="st-description"
                              data-height="120"';
@@ -246,17 +252,17 @@ while ( have_posts() ): the_post();
 						<!--Tour highlight-->
 
 						<?php
-						$tours_highlight = get_post_meta(get_the_ID(), 'tours_highlight', true);
-						if(!empty($tours_highlight)){
-							$arr_highlight = explode("\n", trim($tours_highlight));
+						$tours_highlight = get_post_meta( get_the_ID(), 'tours_highlight', true );
+						if ( ! empty( $tours_highlight ) ) {
+							$arr_highlight = explode( "\n", trim( $tours_highlight ) );
 							?>
 							<div class="st-highlight">
-								<h3 class="st-section-title"><?php echo __('HIGHLIGHTS', ST_TEXTDOMAIN); ?></h3>
+								<h3 class="st-section-title"><?php echo __( 'HIGHLIGHTS', ST_TEXTDOMAIN ); ?></h3>
 								<ul>
 									<?php
-									if(!empty($arr_highlight)){
-										foreach ($arr_highlight as $k => $v) {
-											echo '<li>' . $v  .'</li>';
+									if ( ! empty( $arr_highlight ) ) {
+										foreach ( $arr_highlight as $k => $v ) {
+											echo '<li>' . $v . '</li>';
 										}
 									}
 									?>
@@ -268,14 +274,15 @@ while ( have_posts() ): the_post();
 						<!--Tour program-->
 						<div class="st-program">
 							<div class="st-title-wrapper">
-								<h3 class="st-section-title"><?php echo __('Itinerary', ST_TEXTDOMAIN); ?></h3>
+								<h3 class="st-section-title"><?php echo __( 'Itinerary', ST_TEXTDOMAIN ); ?></h3>
 							</div>
 							<div class="st-program-list">
 								<?php
-								$tour_program_style = get_post_meta(get_the_ID(), 'tours_program_style', true);
-								if(empty($tour_program_style))
+								$tour_program_style = get_post_meta( get_the_ID(), 'tours_program_style', true );
+								if ( empty( $tour_program_style ) ) {
 									$tour_program_style = 'style1';
-								echo st()->load_template('layouts/modern/tour/single/items/itenirary/' . $tour_program_style);
+								}
+								echo st()->load_template( 'layouts/modern/tour/single/items/itenirary/' . $tour_program_style );
 								?>
 							</div>
 						</div>
@@ -284,18 +291,18 @@ while ( have_posts() ): the_post();
 						<!--Tour Include/Exclude-->
 						<div class="st-include">
 							<h3 class="st-section-title">
-								<?php echo __('Included/Exclude', ST_TEXTDOMAIN); ?>
+								<?php echo __( 'Included/Exclude', ST_TEXTDOMAIN ); ?>
 							</h3>
 							<div class="row">
 								<div class="col-lg-6">
 									<ul class="include">
 										<?php
-										$include = get_post_meta(get_the_ID(), 'tours_include', true);
-										if(!empty($include)){
-											$in_arr = explode("\n", $include);
-											if(!empty($in_arr)) {
-												foreach ($in_arr as $k => $v) {
-													echo '<li>'. TravelHelper::getNewIcon('check-1', '#2ECC71', '14px', '14px', false) . $v .'</li>';
+										$include = get_post_meta( get_the_ID(), 'tours_include', true );
+										if ( ! empty( $include ) ) {
+											$in_arr = explode( "\n", $include );
+											if ( ! empty( $in_arr ) ) {
+												foreach ( $in_arr as $k => $v ) {
+													echo '<li>' . TravelHelper::getNewIcon( 'check-1', '#2ECC71', '14px', '14px', false ) . $v . '</li>';
 												}
 											}
 										}
@@ -305,12 +312,12 @@ while ( have_posts() ): the_post();
 								<div class="col-lg-6">
 									<ul class="exclude">
 										<?php
-										$exclude = get_post_meta(get_the_ID(), 'tours_exclude', true);
-										if(!empty($exclude)){
-											$ex_arr = explode("\n", $exclude);
-											if(!empty($ex_arr)) {
-												foreach ($ex_arr as $k => $v) {
-													echo '<li>'. TravelHelper::getNewIcon('remove', '#FA5636', '18px', '18px', false) . $v .'</li>';
+										$exclude = get_post_meta( get_the_ID(), 'tours_exclude', true );
+										if ( ! empty( $exclude ) ) {
+											$ex_arr = explode( "\n", $exclude );
+											if ( ! empty( $ex_arr ) ) {
+												foreach ( $ex_arr as $k => $v ) {
+													echo '<li>' . TravelHelper::getNewIcon( 'remove', '#FA5636', '18px', '18px', false ) . $v . '</li>';
 												}
 											}
 										}
@@ -354,172 +361,183 @@ while ( have_posts() ): the_post();
 
 						<!--Tour FAQ-->
 						<?php
-						$tour_faq = get_post_meta(get_the_ID(), 'tours_faq', true);
-						if(!empty($tour_faq)){
+						$tour_faq = get_post_meta( get_the_ID(), 'tours_faq', true );
+						if ( ! empty( $tour_faq ) ) {
 							?>
 							<div class="st-faq">
 								<h3 class="st-section-title">
-									<?php echo __('FAQs', ST_TEXTDOMAIN); ?>
+									<?php echo __( 'FAQs', ST_TEXTDOMAIN ); ?>
 								</h3>
-								<?php $i = 0; foreach ($tour_faq as $k => $v){ ?>
+								<?php $i = 0;
+								foreach ( $tour_faq as $k => $v ) { ?>
 									<div class="item <?php echo $i == 0 ? 'active' : ''; ?>">
 										<div class="header">
 											<?php echo TravelHelper::getNewIcon( 'question-help-message', '#5E6D77', '18px', '18px' ); ?>
-											<h5><?php echo esc_html($v['title']); ?></h5>
+											<h5><?php echo esc_html( $v['title'] ); ?></h5>
 											<span class="arrow">
                                                 <i class="fa fa-angle-down"></i>
                                             </span>
 										</div>
 										<div class="body">
-											<?php echo balanceTags(nl2br($v['desc'])); ?>
+											<?php echo balanceTags( nl2br( $v['desc'] ) ); ?>
 										</div>
 									</div>
-									<?php $i++; } ?>
+									<?php $i ++;
+								} ?>
 							</div>
 							<?php
 						}
 						?>
 						<!--End Tour FAQ-->
 
-						<!--Review Option-->
-						<div class="st-hr large st-height2 st-hr-comment"></div>
-						<h2 class="st-heading-section"><?php echo esc_html__( 'Reviews', ST_TEXTDOMAIN ) ?></h2>
-						<div id="reviews" data-toggle-section="st-reviews" class=" stoped-scroll-section">
-							<div class="review-box">
-								<div class="row">
-									<div class="col-lg-5">
-										<div class="review-box-score">
-											<?php
-											$avg = STReview::get_avg_rate();
-											?>
-											<div class="review-score">
-												<?php echo esc_attr( $avg ); ?><span class="per-total">/5</span>
-											</div>
-											<div class="review-score-text"><?php echo TravelHelper::get_rate_review_text( $avg ); ?></div>
-											<div class="review-score-base">
-												<?php echo __( 'Based on', ST_TEXTDOMAIN ) ?>
-												<span><?php comments_number( __( '0 review', ST_TEXTDOMAIN ), __( '1 review', ST_TEXTDOMAIN ), __( '% reviews', ST_TEXTDOMAIN ) ); ?></span>
-											</div>
-										</div>
-									</div>
-									<div class="col-lg-7">
-										<div class="review-sumary">
-											<?php $total = get_comments_number(); ?>
-											<?php $rate_exe = STReview::count_review_by_rate( null, 5 ); ?>
-											<div class="item">
-												<div class="label">
-													<?php echo esc_html__( 'Excellent', ST_TEXTDOMAIN ) ?>
-												</div>
-												<div class="progress">
-													<div class="percent green"
-															 style="width: <?php echo TravelHelper::cal_rate( $rate_exe, $total ) ?>%;"></div>
-												</div>
-												<div class="number"><?php echo $rate_exe; ?></div>
-											</div>
-											<?php $rate_good = STReview::count_review_by_rate( null, 4 ); ?>
-											<div class="item">
-												<div class="label">
-													<?php echo __( 'Very Good', ST_TEXTDOMAIN ) ?>
-												</div>
-												<div class="progress">
-													<div class="percent darkgreen"
-															 style="width: <?php echo TravelHelper::cal_rate( $rate_good, $total ) ?>%;"></div>
-												</div>
-												<div class="number"><?php echo $rate_good; ?></div>
-											</div>
-											<?php $rate_avg = STReview::count_review_by_rate( null, 3 ); ?>
-											<div class="item">
-												<div class="label">
-													<?php echo __( 'Average', ST_TEXTDOMAIN ) ?>
-												</div>
-												<div class="progress">
-													<div class="percent yellow"
-															 style="width: <?php echo TravelHelper::cal_rate( $rate_avg, $total ) ?>%;"></div>
-												</div>
-												<div class="number"><?php echo $rate_avg; ?></div>
-											</div>
-											<?php $rate_poor = STReview::count_review_by_rate( null, 2 ); ?>
-											<div class="item">
-												<div class="label">
-													<?php echo __( 'Poor', ST_TEXTDOMAIN ) ?>
-												</div>
-												<div class="progress">
-													<div class="percent orange"
-															 style="width: <?php echo TravelHelper::cal_rate( $rate_poor, $total ) ?>%;"></div>
-												</div>
-												<div class="number"><?php echo $rate_poor; ?></div>
-											</div>
-											<?php $rate_terible = STReview::count_review_by_rate( null, 1 ); ?>
-											<div class="item">
-												<div class="label">
-													<?php echo __( 'Terrible', ST_TEXTDOMAIN ) ?>
-												</div>
-												<div class="progress">
-													<div class="percent red"
-															 style="width: <?php echo TravelHelper::cal_rate( $rate_terible, $total ) ?>%;"></div>
-												</div>
-												<div class="number"><?php echo $rate_terible; ?></div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="review-pagination">
-								<div class="summary">
-									<?php
-									$comments_count   = wp_count_comments( get_the_ID() );
-									$total            = (int)$comments_count->approved;
-									$comment_per_page = (int)get_option( 'comments_per_page', 10 );
-									$paged            = (int)STInput::get( 'comment_page', 1 );
-									$from             = $comment_per_page * ( $paged - 1 ) + 1;
-									$to               = ( $paged * $comment_per_page < $total ) ? ( $paged * $comment_per_page ) : $total;
-									?>
-								</div>
-								<div id="reviews" class="review-list">
-									<?php
-									$offset         = ( $paged - 1 ) * $comment_per_page;
-									$args           = [
-										'number'  => $comment_per_page,
-										'offset'  => $offset,
-										'post_id' => get_the_ID(),
-										'status' => ['approve']
-									];
-									$comments_query = new WP_Comment_Query;
-									$comments       = $comments_query->query( $args );
+						<?php
+						if ( $count_review ) {
+							?>
 
-									if ( $comments ):
-										foreach ( $comments as $key => $comment ):
-											echo st()->load_template( 'layouts/modern/common/reviews/review', 'list', [ 'comment' => (object)$comment, 'post_type' => 'st_tours' ] );
-										endforeach;
-									endif;
-									?>
+							<!--Review Option-->
+							<div class="st-hr large st-height2 st-hr-comment"></div>
+							<h2 class="st-heading-section"><?php echo esc_html__( 'Reviews', ST_TEXTDOMAIN ) ?></h2>
+							<div id="reviews" data-toggle-section="st-reviews" class=" stoped-scroll-section">
+								<div class="review-box">
+									<div class="row">
+										<div class="col-lg-5">
+											<div class="review-box-score">
+												<?php
+												$avg = STReview::get_avg_rate();
+												?>
+												<div class="review-score">
+													<?php echo esc_attr( $avg ); ?><span class="per-total">/5</span>
+												</div>
+												<div class="review-score-text"><?php echo TravelHelper::get_rate_review_text( $avg ); ?></div>
+												<div class="review-score-base">
+													<?php echo __( 'Based on', ST_TEXTDOMAIN ) ?>
+													<span><?php comments_number( __( '0 review', ST_TEXTDOMAIN ), __( '1 review', ST_TEXTDOMAIN ), __( '% reviews', ST_TEXTDOMAIN ) ); ?></span>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-7">
+											<div class="review-sumary">
+												<?php $total = get_comments_number(); ?>
+												<?php $rate_exe = STReview::count_review_by_rate( null, 5 ); ?>
+												<div class="item">
+													<div class="label">
+														<?php echo esc_html__( 'Excellent', ST_TEXTDOMAIN ) ?>
+													</div>
+													<div class="progress">
+														<div class="percent green"
+																 style="width: <?php echo TravelHelper::cal_rate( $rate_exe, $total ) ?>%;"></div>
+													</div>
+													<div class="number"><?php echo $rate_exe; ?></div>
+												</div>
+												<?php $rate_good = STReview::count_review_by_rate( null, 4 ); ?>
+												<div class="item">
+													<div class="label">
+														<?php echo __( 'Very Good', ST_TEXTDOMAIN ) ?>
+													</div>
+													<div class="progress">
+														<div class="percent darkgreen"
+																 style="width: <?php echo TravelHelper::cal_rate( $rate_good, $total ) ?>%;"></div>
+													</div>
+													<div class="number"><?php echo $rate_good; ?></div>
+												</div>
+												<?php $rate_avg = STReview::count_review_by_rate( null, 3 ); ?>
+												<div class="item">
+													<div class="label">
+														<?php echo __( 'Average', ST_TEXTDOMAIN ) ?>
+													</div>
+													<div class="progress">
+														<div class="percent yellow"
+																 style="width: <?php echo TravelHelper::cal_rate( $rate_avg, $total ) ?>%;"></div>
+													</div>
+													<div class="number"><?php echo $rate_avg; ?></div>
+												</div>
+												<?php $rate_poor = STReview::count_review_by_rate( null, 2 ); ?>
+												<div class="item">
+													<div class="label">
+														<?php echo __( 'Poor', ST_TEXTDOMAIN ) ?>
+													</div>
+													<div class="progress">
+														<div class="percent orange"
+																 style="width: <?php echo TravelHelper::cal_rate( $rate_poor, $total ) ?>%;"></div>
+													</div>
+													<div class="number"><?php echo $rate_poor; ?></div>
+												</div>
+												<?php $rate_terible = STReview::count_review_by_rate( null, 1 ); ?>
+												<div class="item">
+													<div class="label">
+														<?php echo __( 'Terrible', ST_TEXTDOMAIN ) ?>
+													</div>
+													<div class="progress">
+														<div class="percent red"
+																 style="width: <?php echo TravelHelper::cal_rate( $rate_terible, $total ) ?>%;"></div>
+													</div>
+													<div class="number"><?php echo $rate_terible; ?></div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-							</div>
-							<div class="review-pag-wrapper">
-								<div class="review-pag-text">
-									<?php echo sprintf( __( 'Showing %s - %s of %s in total', ST_TEXTDOMAIN ), $from, $to, get_comments_number_text('0', '1', '%') ) ?>
+								<div class="review-pagination">
+									<div class="summary">
+										<?php
+										$comments_count   = wp_count_comments( get_the_ID() );
+										$total            = (int) $comments_count->approved;
+										$comment_per_page = (int) get_option( 'comments_per_page', 10 );
+										$paged            = (int) STInput::get( 'comment_page', 1 );
+										$from             = $comment_per_page * ( $paged - 1 ) + 1;
+										$to               = ( $paged * $comment_per_page < $total ) ? ( $paged * $comment_per_page ) : $total;
+										?>
+									</div>
+									<div id="reviews" class="review-list">
+										<?php
+										$offset         = ( $paged - 1 ) * $comment_per_page;
+										$args           = [
+											'number'  => $comment_per_page,
+											'offset'  => $offset,
+											'post_id' => get_the_ID(),
+											'status'  => [ 'approve' ]
+										];
+										$comments_query = new WP_Comment_Query;
+										$comments       = $comments_query->query( $args );
+
+										if ( $comments ):
+											foreach ( $comments as $key => $comment ):
+												echo st()->load_template( 'layouts/modern/common/reviews/review', 'list', [
+													'comment'   => (object) $comment,
+													'post_type' => 'st_tours'
+												] );
+											endforeach;
+										endif;
+										?>
+									</div>
 								</div>
-								<?php TravelHelper::pagination_comment( [ 'total' => $total ] ) ?>
-							</div>
-							<?php
-							if ( comments_open( $post_id ) ) {
-								?>
-								<div id="write-review">
-									<h4 class="heading">
-										<a href="" class="toggle-section c-main f16"
-											 data-target="st-review-form"><?php echo __( 'Write a review', ST_TEXTDOMAIN ) ?>
-											<i class="fa fa-angle-down ml5"></i></a>
-									</h4>
-									<?php
-									TravelHelper::comment_form();
-									?>
+								<div class="review-pag-wrapper">
+									<div class="review-pag-text">
+										<?php echo sprintf( __( 'Showing %s - %s of %s in total', ST_TEXTDOMAIN ), $from, $to, get_comments_number_text( '0', '1', '%' ) ) ?>
+									</div>
+									<?php TravelHelper::pagination_comment( [ 'total' => $total ] ) ?>
 								</div>
 								<?php
-							}
-							?>
-						</div>
-						<!--End Review Option-->
-
+								if ( comments_open( $post_id ) ) {
+									?>
+									<div id="write-review">
+										<h4 class="heading">
+											<a href="" class="toggle-section c-main f16"
+												 data-target="st-review-form"><?php echo __( 'Write a review', ST_TEXTDOMAIN ) ?>
+												<i class="fa fa-angle-down ml5"></i></a>
+										</h4>
+										<?php
+										TravelHelper::comment_form();
+										?>
+									</div>
+									<?php
+								}
+								?>
+							</div>
+							<!--End Review Option-->
+							<?php
+						}
+						?>
 					</div>
 					<div class="col-xs-12 col-sm-4 col-md-3">
 						<?php
@@ -531,71 +549,81 @@ while ( have_posts() ): the_post();
 									<?php echo TravelHelper::getNewIcon( 'Ico_close' ); ?>
 								</div>
 								<div class="form-book-wrapper relative">
-									<?php if(!empty( $info_price['discount'] ) and $info_price['discount']>0 and $info_price['price_new'] >0) { ?>
+									<?php if ( ! empty( $info_price['discount'] ) and $info_price['discount'] > 0 and $info_price['price_new'] > 0 ) { ?>
 										<div class="tour-sale-box">
-											<?php echo STFeatured::get_sale($info_price['discount']); ?>
+											<?php echo STFeatured::get_sale( $info_price['discount'] ); ?>
 										</div>
 									<?php } ?>
 									<?php echo st()->load_template( 'layouts/modern/common/loader' ); ?>
 									<div class="form-head">
 										<div class="price">
                                                 <span class="label">
-                                                    <?php _e("from", ST_TEXTDOMAIN) ?>
+                                                    <?php _e( "from", ST_TEXTDOMAIN ) ?>
                                                 </span>
 											<span class="value">
                                                     <?php
-																										echo STTour::get_price_html(get_the_ID());
+																										echo STTour::get_price_html( get_the_ID() );
 																										?>
                                                 </span>
 										</div>
 									</div>
-									<?php if(empty($tour_external) || $tour_external == 'off'){ ?>
+									<?php if ( empty( $tour_external ) || $tour_external == 'off' ) { ?>
 										<form id="form-booking-inpage" method="post" action="#booking-request">
 											<input type="hidden" name="action" value="tours_add_to_cart">
 											<input type="hidden" name="item_id" value="<?php echo get_the_ID(); ?>">
-											<input type="hidden" name="type_tour" value="<?php echo get_post_meta(get_the_ID(), 'type_tour', true) ?>">
+											<input type="hidden" name="type_tour"
+														 value="<?php echo get_post_meta( get_the_ID(), 'type_tour', true ) ?>">
 											<?php
-											$start = STInput::request('check_in', date(TravelHelper::getDateFormat()));
-											$end = STInput::request('check_out', date(TravelHelper::getDateFormat()));
-											$date = STInput::request('date', date('d/m/Y h:i a'). '-'. date('d/m/Y h:i a'));
-											$has_icon = (isset($has_icon))? $has_icon: false;
+											$start    = STInput::request( 'check_in', date( TravelHelper::getDateFormat() ) );
+											$end      = STInput::request( 'check_out', date( TravelHelper::getDateFormat() ) );
+											$date     = STInput::request( 'date', date( 'd/m/Y h:i a' ) . '-' . date( 'd/m/Y h:i a' ) );
+											$has_icon = ( isset( $has_icon ) ) ? $has_icon : false;
 											?>
-											<div class="form-group form-date-field form-date-search clearfix <?php if($has_icon) echo ' has-icon '; ?>" data-format="<?php echo TravelHelper::getDateFormatMoment() ?>">
+											<div class="form-group form-date-field form-date-search clearfix <?php if ( $has_icon ) {
+												echo ' has-icon ';
+											} ?>" data-format="<?php echo TravelHelper::getDateFormatMoment() ?>">
 												<?php
-												if($has_icon){
-													echo TravelHelper::getNewIcon('ico_calendar_search_box');
+												if ( $has_icon ) {
+													echo TravelHelper::getNewIcon( 'ico_calendar_search_box' );
 												}
 												?>
 												<div class="date-wrapper clearfix">
 													<div class="check-in-wrapper">
-														<label><?php echo __('Date', ST_TEXTDOMAIN); ?></label>
+														<label><?php echo __( 'Date', ST_TEXTDOMAIN ); ?></label>
 														<div class="render check-in-render"><?php echo $start; ?></div>
 														<?php
 														$class_hidden_enddate = 'hidden';
-														if($tour_type != 'daily_tour' && (strtotime($end) - strtotime($start)) > 0 ){
+														if ( $tour_type != 'daily_tour' && ( strtotime( $end ) - strtotime( $start ) ) > 0 ) {
 															$class_hidden_enddate = '';
 														}
 														?>
-														<span class="sts-tour-checkout-label <?php echo $class_hidden_enddate; ?>"><span> - </span><div class="render check-out-render"><?php echo $end; ?></div></span>
+														<span class="sts-tour-checkout-label <?php echo $class_hidden_enddate; ?>"><span> - </span><div
+																class="render check-out-render"><?php echo $end; ?></div></span>
 													</div>
 													<i class="fa fa-angle-down arrow"></i>
 												</div>
-												<input type="text" class="check-in-input" value="<?php echo esc_attr($start) ?>" name="check_in">
-												<input type="hidden" class="check-out-input" value="<?php echo esc_attr($end) ?>" name="check_out" >
-												<input type="text" class="check-in-out-input" value="<?php echo esc_attr($date) ?>" name="check_in_out" data-action="st_get_availability_tour_frontend" data-tour-id="<?php the_ID(); ?>" data-posttype="st_tours">
+												<input type="text" class="check-in-input" value="<?php echo esc_attr( $start ) ?>"
+															 name="check_in">
+												<input type="hidden" class="check-out-input" value="<?php echo esc_attr( $end ) ?>"
+															 name="check_out">
+												<input type="text" class="check-in-out-input" value="<?php echo esc_attr( $date ) ?>"
+															 name="check_in_out" data-action="st_get_availability_tour_frontend"
+															 data-tour-id="<?php the_ID(); ?>" data-posttype="st_tours">
 											</div>
 
 											<?php
 											/*Starttime*/
-											$starttime_value = STInput::request('starttime_tour', '');
+											$starttime_value = STInput::request( 'starttime_tour', '' );
 											?>
 
-											<div class="form-group form-more-extra st-form-starttime" <?php echo $starttime_value != '' ? '' : 'style="display: none"' ?>>
+											<div
+												class="form-group form-more-extra st-form-starttime" <?php echo $starttime_value != '' ? '' : 'style="display: none"' ?>>
 												<input type="hidden" data-starttime="<?php echo $starttime_value; ?>"
 															 data-checkin="<?php echo $start; ?>" data-checkout="<?php echo $end; ?>"
-															 data-tourid="<?php echo get_the_ID(); ?>" id="starttime_hidden_load_form" data-posttype="st_tours"/>
+															 data-tourid="<?php echo get_the_ID(); ?>" id="starttime_hidden_load_form"
+															 data-posttype="st_tours"/>
 												<div class="" id="starttime_box">
-													<label><?php echo __('Start time', ST_TEXTDOMAIN); ?></label>
+													<label><?php echo __( 'Start time', ST_TEXTDOMAIN ); ?></label>
 													<select class="form-control st_tour_starttime" name="starttime_tour"
 																	id="starttime_tour"></select>
 												</div>
@@ -614,9 +642,10 @@ while ( have_posts() ): the_post();
 												<?php echo STTemplate::message() ?>
 											</div>
 										</form>
-									<?php }else{ ?>
+									<?php } else { ?>
 										<div class="submit-group mb30">
-											<a href="<?php echo esc_url($tour_external_link); ?>" class="btn btn-green btn-large btn-full upper"><?php echo esc_html__( 'Book Now', ST_TEXTDOMAIN ); ?></a>
+											<a href="<?php echo esc_url( $tour_external_link ); ?>"
+												 class="btn btn-green btn-large btn-full upper"><?php echo esc_html__( 'Book Now', ST_TEXTDOMAIN ); ?></a>
 										</div>
 									<?php } ?>
 								</div>
@@ -628,20 +657,25 @@ while ( have_posts() ): the_post();
 											$author_id = get_post_field( 'post_author', get_the_ID() );
 											$userdata  = get_userdata( $author_id );
 											?>
-											<a href="<?php echo get_author_posts_url($author_id); ?>">
+											<a href="<?php echo get_author_posts_url( $author_id ); ?>">
 												<?php
 												echo st_get_profile_avatar( $author_id, 60 );
 												?>
 											</a>
 										</div>
 										<div class="media-body">
-											<h4 class="media-heading"><a href="<?php echo get_author_posts_url($author_id); ?>" class="author-link"><?php echo TravelHelper::get_username( $author_id ); ?></a></h4>
+											<h4 class="media-heading">
+												<a href="<?php echo get_author_posts_url( $author_id ); ?>" class="author-link">
+													<?php echo TravelHelper::get_username( $author_id ); ?></a>
+											</h4>
+<?php /*
+
 											<p><?php echo sprintf( __( 'Member Since %s', ST_TEXTDOMAIN ), date( 'Y', strtotime( $userdata->user_registered ) ) ) ?></p>
 											<?php
-											$arr_service = STUser_f::getListServicesAuthor($userdata);
-											$review_data = STUser_f::getReviewsDataAuthor($arr_service, $userdata);
-											if (!empty($review_data)) {
-												$avg_rating = STUser_f::getAVGRatingAuthor($review_data);
+											$arr_service = STUser_f::getListServicesAuthor( $userdata );
+											$review_data = STUser_f::getReviewsDataAuthor( $arr_service, $userdata );
+											if ( ! empty( $review_data ) ) {
+												$avg_rating = STUser_f::getAVGRatingAuthor( $review_data );
 												?>
 												<div class="author-review-box">
 													<div class="author-start-rating">
@@ -654,11 +688,12 @@ while ( have_posts() ): the_post();
 														</div>
 													</div>
 													<p class="author-review-label">
-														<?php printf(__('%d Reviews', ST_TEXTDOMAIN), count($review_data)); ?>
+														<?php printf( __( '%d Reviews', ST_TEXTDOMAIN ), count( $review_data ) ); ?>
 													</p>
 												</div>
 											<?php }
 											?>
+*/ ?>
 										</div>
 									</div>
 								</div>
@@ -692,32 +727,35 @@ while ( have_posts() ): the_post();
 													 class="img-responsive">
 										</a>
 										<?php echo st()->load_template( 'layouts/modern/hotel/loop/wishlist' ); ?>
-										<?php echo st_get_avatar_in_list_service(get_the_ID(),50); ?>
+										<?php echo st_get_avatar_in_list_service( get_the_ID(), 50 ); ?>
 									</div>
 									<div class="body">
 										<?php
 										$address = get_post_meta( get_the_ID(), 'address', true );
 										if ( $address ) {
 											echo TravelHelper::getNewIcon( 'ico_maps_add_2', '#5E6D77', '16px', '16px' );
-											echo '<span class="ml5 f14 address">'.esc_html( $address ).'</span>';
+											echo '<span class="ml5 f14 address">' . esc_html( $address ) . '</span>';
 										}
 										?>
 										<h4 class="title"><a href="<?php the_permalink() ?>"
 																				 class="st-link c-main"><?php the_title(); ?></a></h4>
 										<?php
 										$review_rate = STReview::get_avg_rate();
-										echo st()->load_template( 'layouts/modern/common/star', '', [ 'star' => $review_rate, 'style' => 'style-2' ] );
+										echo st()->load_template( 'layouts/modern/common/star', '', [ 'star'  => $review_rate,
+																																									'style' => 'style-2'
+										] );
 										?>
-										<p class="review-text"><?php comments_number( __( '0 review', ST_TEXTDOMAIN ), __( '1 review', ST_TEXTDOMAIN ), __( '% reviews', ST_TEXTDOMAIN ) ); ?></p>
+										<p
+											class="review-text"><?php comments_number( __( '0 review', ST_TEXTDOMAIN ), __( '1 review', ST_TEXTDOMAIN ), __( '% reviews', ST_TEXTDOMAIN ) ); ?></p>
 										<div class="st-flex space-between">
 											<div class="left st-flex">
-												<?php echo TravelHelper::getNewIcon('time-clock-circle-1', '#5E6D77', '16px', '16px'); ?>
-												<span class="duration"><?php echo get_post_meta(get_the_ID(), 'duration_day', true); ?></span>
+												<?php echo TravelHelper::getNewIcon( 'time-clock-circle-1', '#5E6D77', '16px', '16px' ); ?>
+												<span class="duration"><?php echo get_post_meta( get_the_ID(), 'duration_day', true ); ?></span>
 											</div>
 											<div class="right st-flex">
-												<?php echo TravelHelper::getNewIcon('thunder', '#FFAB53', '9px', '16px', false); ?>
+												<?php echo TravelHelper::getNewIcon( 'thunder', '#FFAB53', '9px', '16px', false ); ?>
 												<span class="price">
-                                                                <?php echo sprintf(esc_html__('from %s', ST_TEXTDOMAIN), STTour::get_price_html(get_the_ID())); ?>
+                                                                <?php echo sprintf( esc_html__( 'from %s', ST_TEXTDOMAIN ), STTour::get_price_html( get_the_ID() ) ); ?>
                                                             </span>
 											</div>
 										</div>

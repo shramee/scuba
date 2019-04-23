@@ -91,7 +91,7 @@ $hotel_logo   = get_post_meta( $post_id, 'logo', true );
 					if ( $price ) {
 						?>
 						<span class="scuba-booking-item-price text-primary">
-							<?php printf( __( "Packages from %s", ST_TEXTDOMAIN ), explode( '.', TravelHelper::format_money( $price ) )[0] ) ?>
+							<?php printf( __( "Packages from %s", ST_TEXTDOMAIN ), str_replace( '.00', '', TravelHelper::format_money( $price ) ) ); ?>
 						</span>
 						<?php
 					}

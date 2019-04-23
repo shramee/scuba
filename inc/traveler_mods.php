@@ -61,3 +61,62 @@ if ( ! function_exists( 'st_location_list_hotel_func' ) ) {
 
 	st_reg_shortcode( 'st_location_list_hotel', 'st_location_list_hotel_func' );
 };
+
+if(!function_exists( 'st_vc_list_tour' )) {
+	function st_vc_list_tour( $attr , $content = false )
+	{
+		global $st_search_args;
+		$param   = array(
+			'st_ids'                 => '' ,
+			'st_number_tour'         => 4 ,
+			'st_order'               => '' ,
+			'st_orderby'             => '' ,
+			'st_tour_of_row'         => '' ,
+			'st_style'               => 'style_1' ,
+			'only_featured_location' => 'no' ,
+			'st_location'            => '' ,
+			'title'                  => '' ,
+			'font_size'              => '3' ,
+		);
+		$list_tax = TravelHelper::get_object_taxonomies_service('st_tours');
+		if( !empty( $list_tax ) ){
+			foreach( $list_tax as $name => $label ){
+				$param['taxonomies--'. $name] = '';
+			}
+		}
+
+		$data    = shortcode_atts( $param , $attr , 'st_list_tour' );
+
+		extract( $data );
+		$st_search_args=$data;
+
+		$page = STInput::request( 'paged' );
+		if(!$page) {
+			$page = get_query_var( 'paged' );
+		}
+		$query = array(
+			'post_type'      => 'st_tours' ,
+			'posts_per_page' => $st_number_tour ,
+			'paged'          => $page ,
+			'order'          => $st_order ,
+			'orderby'        => $st_orderby,
+		);
+
+		$st_search_args['featured_location']=STLocation::inst()->get_featured_ids();
+		$tour=STTour::get_instance();
+		$tour->alter_search_query();
+		query_posts( $query );
+		global $wp_query;
+		$r = "<div class='list_tours'>" . st()->load_template( 'vc-elements/st-list-tour/loop3' , '' , $data ) . "</div>";
+		wp_reset_query();
+		$tour->remove_alter_search_query();
+		$st_search_args=null;
+
+		if(!empty( $title ) and !empty( $r )) {
+			$r = '<h' . $font_size . '>' . $title . '</h' . $font_size . '>' . $r;
+		}
+		return $r;
+	}
+	st_reg_shortcode( 'st_list_tour' , 'st_vc_list_tour' );
+
+}
