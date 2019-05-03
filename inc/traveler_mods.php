@@ -121,20 +121,18 @@ if(!function_exists( 'st_vc_list_tour' )) {
 
 }
 
-if ( ! function_exists( 'st_after_logout_redirect' ) ) {
-	function st_after_logout_redirect( $redirect_to, $requested_redirect_to, $user ) {
-		return st_after_login_redirect( $redirect_to, $requested_redirect_to, $user );
-	}
-}
-
 if ( ! function_exists( 'st_after_login_redirect' ) ) {
 	function st_after_login_redirect( $redirect_to, $request, $user ) {
 		if ( $_SERVER['HTTP_REFERER'] ) {
 			$redirect_to = $_SERVER['HTTP_REFERER'];
 		}
 
-		die( $redirect_to );
-
 		return $redirect_to;
+	}
+}
+
+if ( ! function_exists( 'st_after_logout_redirect' ) ) {
+	function st_after_logout_redirect( $redirect_to, $requested_redirect_to, $user ) {
+		return st_after_login_redirect( $redirect_to, $requested_redirect_to, $user );
 	}
 }
