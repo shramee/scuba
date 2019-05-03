@@ -1,0 +1,14 @@
+.author-info-inline {
+	display: inline-block;
+	img{
+		border-radius: 999px;
+		margin: 0 .5em;
+	}
+}
+
+@media (min-width: 480px) {
+	.author-info-inline {
+		float: right;
+		margin-left: 1.6em;
+	}
+}
