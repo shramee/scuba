@@ -122,7 +122,7 @@ if(!function_exists( 'st_vc_list_tour' )) {
 }
 
 if ( ! function_exists( 'st_after_login_redirect' ) ) {
-	function st_after_login_redirect( $redirect_to, $request, $user ) {
+	function st_after_login_redirect( $redirect_to = '', $request = '', $user = '' ) {
 		if ( $_SERVER['HTTP_REFERER'] ) {
 			$redirect_to = $_SERVER['HTTP_REFERER'];
 		}
