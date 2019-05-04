@@ -21,8 +21,8 @@ class Scubahive_Partners {
 
 	public function __construct() {
 
-		add_action( 'show_user_profile', [ $this, 'profile_fields' ] );
-		add_action( 'edit_user_profile', [ $this, 'profile_fields' ] );
+//		add_action( 'show_user_profile', [ $this, 'profile_fields' ] );
+//		add_action( 'edit_user_profile', [ $this, 'profile_fields' ] );
 
 	}
 

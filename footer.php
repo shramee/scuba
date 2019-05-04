@@ -62,5 +62,17 @@ switch ( st()->get_option( 'scroll_style', '' ) ) {
 <?php do_action( 'st_before_footer' ); ?>
 <?php wp_footer(); ?>
 <?php do_action( 'st_after_footer' ); ?>
+
+<?php
+if ( empty( $_COOKIE['permission_granted'] ) ) {
+	?>
+	<div class="cookie-permission-box">
+		This site uses cookies to ensure you get best experience on site.
+		<a onclick="document.cookie='permission_granted=1';this.parentNode.style.display='none';"
+			 href="#" class="btn btn-primary">Okay</a>
+	</div>
+	<?php
+}
+?>
 </body>
 </html>

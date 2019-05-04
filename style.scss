@@ -11,11 +11,12 @@ Template:    traveler
 
 @import "scss/utils";
 
+@import "scss/cookie-box";
+
 @import "scss/forms";
 
 @import "scss/locations-loop";
 
 @import "scss/hotels";
 
-@import "blog";
-
+@import "scss/blog";

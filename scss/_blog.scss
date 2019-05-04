@@ -1,5 +1,6 @@
 .author-info-inline {
 	display: inline-block;
+	margin-left: .5em;
 	img{
 		border-radius: 999px;
 		margin: 0 .5em;
@@ -8,7 +9,7 @@
 
 @media (min-width: 480px) {
 	.author-info-inline {
-		float: right;
-		margin-left: 1.6em;
+		float: left;
+		margin: -2px 1.6em 0 0;
 	}
 }

@@ -58,6 +58,20 @@ Template:    traveler
     text-align: center; }
   body .text-right-md {
     text-align: right; } }
+.cookie-permission-box {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f5f5f5;
+  border: 1px solid #aaa;
+  margin: 1em;
+  padding: 1em;
+  z-index: 9999; }
+  .cookie-permission-box a.btn.btn-primary {
+    margin: 0 0 0 1em;
+    padding: .2em .5em; }
+
 .scuba-btn-grp {
   clear: both;
   display: flex;
@@ -117,14 +131,15 @@ Template:    traveler
   margin-bottom: .7em; }
 
 .author-info-inline {
-  display: inline-block; }
+  display: inline-block;
+  margin-left: .5em; }
   .author-info-inline img {
     border-radius: 999px;
     margin: 0 .5em; }
 
 @media (min-width: 480px) {
   .author-info-inline {
-    float: right;
-    margin-left: 1.6em; } }
+    float: left;
+    margin: -2px 1.6em 0 0; } }
 
 /*# sourceMappingURL=style.css.map */
